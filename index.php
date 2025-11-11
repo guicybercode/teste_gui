@@ -200,7 +200,7 @@
 
     <!-- Footer -->
     <footer class="page-footer">
-        <p>&copy; 2024 Cyber Mathrock. Software Engineer & Music</p>
+        <p>&copy; 2025 Cyber Mathrock. Software Engineer & Music</p>
     </footer>
 
     <script src="js/main.js"></script>
