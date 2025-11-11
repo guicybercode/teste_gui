@@ -767,7 +767,7 @@ body {
     height: 0;
     overflow: hidden;
     max-width: 800px;
-    margin: 2rem auto;
+    margin: 2rem auto 3rem auto;
     background: var(--bg-card);
     border: 1px solid var(--border-color);
     box-shadow: 0 2px 8px var(--shadow-soft);
@@ -782,6 +782,11 @@ body {
     border: none;
 }
 
+.video-container + p {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
 /* Photo Placeholder */
 .photo-placeholder {
     width: 100%;
@@ -789,7 +794,7 @@ body {
     max-width: 800px;
     background: linear-gradient(135deg, var(--bg-tertiary) 0%, var(--bg-card) 100%);
     border: 1px dashed var(--border-color);
-    margin: 2rem auto;
+    margin: 4rem auto 2rem auto;
     display: flex;
     align-items: center;
     justify-content: center;
