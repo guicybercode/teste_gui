@@ -97,13 +97,13 @@ function initializeSkillsChart() {
             datasets: [{
                 label: 'Skill Level',
                 data: [85, 80, 75, 80, 70, 75, 85, 80],
-                backgroundColor: 'rgba(106, 183, 255, 0.2)',
-                borderColor: 'rgba(106, 183, 255, 0.8)',
+                backgroundColor: 'rgba(125, 155, 193, 0.2)',
+                borderColor: 'rgba(125, 155, 193, 0.8)',
                 borderWidth: 2,
-                pointBackgroundColor: 'rgba(106, 183, 255, 1)',
+                pointBackgroundColor: 'rgba(125, 155, 193, 1)',
                 pointBorderColor: '#fff',
                 pointHoverBackgroundColor: '#fff',
-                pointHoverBorderColor: 'rgba(106, 183, 255, 1)'
+                pointHoverBorderColor: 'rgba(125, 155, 193, 1)'
             }]
         },
         options: {
@@ -115,16 +115,16 @@ function initializeSkillsChart() {
                     max: 100,
                     ticks: {
                         stepSize: 20,
-                        color: '#999999',
+                        color: '#b0b0b0',
                         font: {
                             size: 11
                         }
                     },
                     grid: {
-                        color: '#404040'
+                        color: '#555555'
                     },
                     pointLabels: {
-                        color: '#e0e0e0',
+                        color: '#e8e8e8',
                         font: {
                             size: 12,
                             family: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
@@ -137,10 +137,10 @@ function initializeSkillsChart() {
                     display: false
                 },
                 tooltip: {
-                    backgroundColor: 'rgba(26, 26, 26, 0.9)',
+                    backgroundColor: 'rgba(58, 58, 58, 0.95)',
                     titleColor: '#ffffff',
-                    bodyColor: '#e0e0e0',
-                    borderColor: '#404040',
+                    bodyColor: '#e8e8e8',
+                    borderColor: '#555555',
                     borderWidth: 1
                 }
             }
