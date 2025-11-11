@@ -37,11 +37,6 @@ A modern, lightweight personal website built with PHP, HTML, CSS, and JavaScript
 
 Check out my guitar covers on YouTube: [@moonguip](https://youtube.com/@moonguip)
 
-### Featured Cover: aespa
-[![aespa Cover](https://img.youtube.com/vi/VIDEO_ID/maxresdefault.jpg)](https://youtube.com/watch?v=VIDEO_ID)
-
-*Replace `VIDEO_ID` with your actual YouTube video ID*
-
 ## 🚀 Future Features
 
 - [ ] Add more interactive elements
