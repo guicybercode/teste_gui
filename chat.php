@@ -1,4 +1,7 @@
 <?php
+// Load configuration
+require_once __DIR__ . '/config.php';
+
 // Security headers
 header('Content-Type: application/json');
 header('X-Content-Type-Options: nosniff');
@@ -6,17 +9,34 @@ header('X-Frame-Options: DENY');
 header('X-XSS-Protection: 1; mode=block');
 header('Referrer-Policy: strict-origin-when-cross-origin');
 
-// CORS headers (restrict in production)
-header('Access-Control-Allow-Origin: *');
+// Content Security Policy
+if (CSP_ENABLED) {
+    $csp = "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://api.github.com https://api.github.com/graphql; frame-src https://www.youtube.com;";
+    if (CSP_REPORT_URI) {
+        $csp .= " report-uri " . CSP_REPORT_URI . ";";
+    }
+    header("Content-Security-Policy: " . $csp);
+}
+
+// CORS headers (restrict based on config)
+$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+$allowedOrigin = '*';
+if (ENVIRONMENT === 'production' && in_array(parse_url($origin, PHP_URL_HOST), CORS_ALLOWED_ORIGINS)) {
+    $allowedOrigin = $origin;
+} elseif (ENVIRONMENT === 'development') {
+    $allowedOrigin = '*';
+}
+header('Access-Control-Allow-Origin: ' . $allowedOrigin);
 header('Access-Control-Allow-Methods: GET, POST');
 header('Access-Control-Allow-Headers: Content-Type');
 
-$chatFile = 'chat_messages.txt';
-$rateLimitFile = 'chat_rate_limit.txt';
-$maxMessages = 100;
-$maxFileSize = 1024 * 1024; // 1MB max file size
-$rateLimitMessages = 10; // Max messages per minute per IP
-$rateLimitWindow = 60; // Time window in seconds
+// Use configuration constants
+$chatFile = CHAT_FILE;
+$rateLimitFile = CHAT_RATE_LIMIT_FILE;
+$maxMessages = CHAT_MAX_MESSAGES;
+$maxFileSize = CHAT_MAX_FILE_SIZE;
+$rateLimitMessages = CHAT_RATE_LIMIT_MESSAGES;
+$rateLimitWindow = CHAT_RATE_LIMIT_WINDOW;
 
 // Get client IP
 function getClientIP() {
@@ -109,7 +129,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
     
-    $input = json_decode(file_get_contents('php://input'), true);
+    // Read and validate JSON input
+    $rawInput = file_get_contents('php://input');
+    if (empty($rawInput)) {
+        http_response_code(400);
+        echo json_encode(['error' => 'Request body is required']);
+        exit;
+    }
+    
+    $input = json_decode($rawInput, true);
+    
+    // Validate JSON decoding
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        http_response_code(400);
+        echo json_encode(['error' => 'Invalid JSON format: ' . json_last_error_msg()]);
+        exit;
+    }
     
     if (!isset($input['username']) || !isset($input['message'])) {
         http_response_code(400);
@@ -147,6 +182,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = preg_replace('/[<>"\']/', '', $username);
     $message = preg_replace('/[<>"\']/', '', $message);
     
+    // Validate file paths to prevent path traversal
+    $chatFile = realpath(CHAT_FILE) ?: CHAT_FILE;
+    if (strpos(realpath(dirname($chatFile)), realpath(__DIR__)) !== 0) {
+        http_response_code(500);
+        echo json_encode(['error' => 'Invalid file path']);
+        exit;
+    }
+    
     // Read existing messages
     $messages = [];
     if (file_exists($chatFile)) {
@@ -159,7 +202,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $messages = array_filter($messages, function($msg) use ($currentTime) {
         $messageTime = isset($msg['timestamp']) ? $msg['timestamp'] : 0;
         $ageInHours = ($currentTime - $messageTime) / 3600;
-        return $ageInHours < 24;
+        return $ageInHours < CHAT_EXPIRATION_HOURS;
     });
     $messages = array_values($messages); // Re-index array
     
@@ -208,7 +251,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $messages = array_filter($messages, function($msg) use ($currentTime) {
         $messageTime = isset($msg['timestamp']) ? $msg['timestamp'] : 0;
         $ageInHours = ($currentTime - $messageTime) / 3600;
-        return $ageInHours < 24;
+        return $ageInHours < CHAT_EXPIRATION_HOURS;
     });
     $messages = array_values($messages); // Re-index array
     

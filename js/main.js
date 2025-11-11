@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeSkillsChart();
     initializeScrollAnimations();
     initializeScrollToTop();
+    initializeMobileMenu();
 });
 
 // GitHub Portfolio
@@ -13,8 +14,75 @@ async function initializePortfolio() {
     const portfolioContainer = document.getElementById('portfolio-container');
     if (!portfolioContainer) return;
 
+    // Show loading state with skeleton screens
+    function showSkeletonLoading() {
+        portfolioContainer.innerHTML = '';
+        for (let i = 0; i < 3; i++) {
+            const skeletonCard = document.createElement('div');
+            skeletonCard.className = 'skeleton-card';
+            skeletonCard.innerHTML = `
+                <div class="skeleton skeleton-title"></div>
+                <div class="skeleton skeleton-text"></div>
+                <div class="skeleton skeleton-text short"></div>
+                <div class="skeleton-meta">
+                    <div class="skeleton skeleton-badge"></div>
+                    <div class="skeleton skeleton-badge"></div>
+                </div>
+            `;
+            portfolioContainer.appendChild(skeletonCard);
+        }
+    }
+    
     // Show loading state
-    portfolioContainer.innerHTML = '<div class="portfolio-loading"><div class="loading-spinner"></div> Loading projects...</div>';
+    showSkeletonLoading();
+
+    // Cache configuration
+    const CACHE_KEY = 'github_repos_cache';
+    const CACHE_TTL = 3600000; // 1 hour in milliseconds
+    
+    // Check cache first
+    function getCachedRepos() {
+        try {
+            const cached = localStorage.getItem(CACHE_KEY);
+            if (!cached) return null;
+            
+            const cacheData = JSON.parse(cached);
+            const now = Date.now();
+            
+            // Check if cache is still valid
+            if (cacheData.timestamp && (now - cacheData.timestamp) < CACHE_TTL) {
+                return cacheData.repos;
+            }
+            
+            // Cache expired, remove it
+            localStorage.removeItem(CACHE_KEY);
+            return null;
+        } catch (e) {
+            console.error('Error reading cache:', e);
+            return null;
+        }
+    }
+    
+    // Save to cache
+    function setCachedRepos(repos) {
+        try {
+            const cacheData = {
+                timestamp: Date.now(),
+                repos: repos
+            };
+            localStorage.setItem(CACHE_KEY, JSON.stringify(cacheData));
+        } catch (e) {
+            console.error('Error saving cache:', e);
+        }
+    }
+
+    // Try to load from cache first
+    const cachedRepos = getCachedRepos();
+    if (cachedRepos) {
+        console.log('Loading repositories from cache');
+        renderRepositories(cachedRepos, true);
+        return;
+    }
 
     try {
         // Try GraphQL API first for pinned repositories
@@ -85,6 +153,31 @@ async function initializePortfolio() {
             useGraphQL = false;
         }
 
+        // Cache the results
+        if (repos && repos.length > 0) {
+            setCachedRepos({ repos, useGraphQL });
+        }
+
+        // Render repositories
+        renderRepositories({ repos, useGraphQL });
+    } catch (error) {
+        console.error('Error loading GitHub repositories:', error);
+        portfolioContainer.innerHTML = `
+            <div class="portfolio-error">
+                <p>Unable to load projects. Please check your connection or try again later.</p>
+                <p class="error-details">Error: ${error.message}</p>
+            </div>
+        `;
+    }
+    
+    // Render repositories function
+    function renderRepositories(data, fromCache = false) {
+        if (fromCache) {
+            data = data; // data is already { repos, useGraphQL }
+        }
+        
+        const { repos, useGraphQL } = data;
+        
         // Clear loading state
         portfolioContainer.innerHTML = '';
 
@@ -126,14 +219,6 @@ async function initializePortfolio() {
 
             portfolioContainer.appendChild(repoCard);
         });
-    } catch (error) {
-        console.error('Error loading GitHub repositories:', error);
-        portfolioContainer.innerHTML = `
-            <div class="portfolio-error">
-                <p>Unable to load projects. Please check your connection or try again later.</p>
-                <p class="error-details">Error: ${error.message}</p>
-            </div>
-        `;
     }
 }
 
@@ -171,66 +256,135 @@ function initializeSkillsChart() {
     const canvas = document.getElementById('skillsChart');
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
-    
-    new Chart(ctx, {
-        type: 'radar',
-        data: {
-            labels: ['Programming', 'Music', 'Languages', 'Systems', 'Cloud', 'Reading', 'Composition', 'Linux'],
-            datasets: [{
-                label: 'Skill Level',
-                data: [85, 80, 75, 80, 70, 85, 75, 85],
-                backgroundColor: 'rgba(255, 107, 53, 0.15)',
-                borderColor: 'rgba(255, 107, 53, 0.8)',
-                borderWidth: 2,
-                pointBackgroundColor: 'rgba(255, 107, 53, 1)',
-                pointBorderColor: '#ffffff',
-                pointHoverBackgroundColor: '#ffffff',
-                pointHoverBorderColor: 'rgba(255, 107, 53, 1)'
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: true,
-            scales: {
-                r: {
-                    beginAtZero: true,
-                    max: 100,
-                    ticks: {
-                        stepSize: 20,
-                        color: '#7a7a7a',
-                        font: {
-                            size: 11
-                        }
-                    },
-                    grid: {
-                        color: '#e8e5df'
-                    },
-                    pointLabels: {
-                        color: '#4a4a4a',
-                        font: {
-                            size: 12,
-                            family: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+    // Lazy load Chart.js only when skills section is visible
+    const skillsSection = canvas.closest('section');
+    if (!skillsSection) return;
+
+    // Check if Chart.js is already loaded
+    if (typeof Chart === 'undefined') {
+        // Load Chart.js dynamically
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/chart.js';
+        script.async = true;
+        script.onload = () => {
+            createChart();
+        };
+        script.onerror = () => {
+            console.error('Failed to load Chart.js');
+            canvas.parentElement.innerHTML = '<p>Chart library failed to load. Please refresh the page.</p>';
+        };
+        document.head.appendChild(script);
+    } else {
+        createChart();
+    }
+
+    function createChart() {
+        const ctx = canvas.getContext('2d');
+        
+        new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: ['Programming', 'Music', 'Languages', 'Systems', 'Cloud', 'Reading', 'Composition', 'Linux'],
+                datasets: [{
+                    label: 'Skill Level',
+                    data: [85, 80, 75, 80, 70, 85, 75, 85],
+                    backgroundColor: 'rgba(255, 107, 53, 0.15)',
+                    borderColor: 'rgba(255, 107, 53, 0.8)',
+                    borderWidth: 2,
+                    pointBackgroundColor: 'rgba(255, 107, 53, 1)',
+                    pointBorderColor: '#ffffff',
+                    pointHoverBackgroundColor: '#ffffff',
+                    pointHoverBorderColor: 'rgba(255, 107, 53, 1)'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            stepSize: 20,
+                            color: '#7a7a7a',
+                            font: {
+                                size: 11
+                            }
+                        },
+                        grid: {
+                            color: '#e8e5df'
+                        },
+                        pointLabels: {
+                            color: '#4a4a4a',
+                            font: {
+                                size: 12,
+                                family: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+                            }
                         }
                     }
-                }
-            },
-            plugins: {
-                legend: {
-                    display: false
                 },
-                tooltip: {
-                    backgroundColor: 'rgba(255, 255, 255, 0.98)',
-                    titleColor: '#2d2d2d',
-                    bodyColor: '#4a4a4a',
-                    borderColor: '#e8e5df',
-                    borderWidth: 1,
-                    padding: 12,
-                    boxPadding: 6
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(255, 255, 255, 0.98)',
+                        titleColor: '#2d2d2d',
+                        bodyColor: '#4a4a4a',
+                        borderColor: '#e8e5df',
+                        borderWidth: 1,
+                        padding: 12,
+                        boxPadding: 6
+                    }
                 }
             }
+        });
+    }
+
+    // Use IntersectionObserver to load Chart.js only when section is visible
+    if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Section is visible, initialize chart
+                    if (typeof Chart === 'undefined') {
+                        const script = document.createElement('script');
+                        script.src = 'https://cdn.jsdelivr.net/npm/chart.js';
+                        script.async = true;
+                        script.onload = () => {
+                            createChart();
+                        };
+                        script.onerror = () => {
+                            console.error('Failed to load Chart.js');
+                            canvas.parentElement.innerHTML = '<p>Chart library failed to load. Please refresh the page.</p>';
+                        };
+                        document.head.appendChild(script);
+                    } else {
+                        createChart();
+                    }
+                    observer.unobserve(skillsSection);
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '50px'
+        });
+
+        observer.observe(skillsSection);
+    } else {
+        // Fallback: load immediately if IntersectionObserver not supported
+        if (typeof Chart === 'undefined') {
+            const script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/chart.js';
+            script.async = true;
+            script.onload = () => {
+                createChart();
+            };
+            document.head.appendChild(script);
+        } else {
+            createChart();
         }
-    });
+    }
 }
 
 // Scroll Animations
@@ -279,19 +433,55 @@ function initializeScrollAnimations() {
 // Chat functionality
 let chatPollingInterval;
 let lastMessageCount = 0;
+let pollingInterval = 3000; // Start with 3 seconds
+let isUserScrolling = false;
+let userScrollPosition = 0;
+let shouldAutoScroll = true;
 
 function initializeChat() {
     const sendBtn = document.getElementById('sendChatBtn');
     const messageInput = document.getElementById('chatMessage');
     const usernameInput = document.getElementById('chatUsername');
+    const messagesContainer = document.getElementById('chat-messages');
 
-    if (!sendBtn || !messageInput || !usernameInput) return;
+    if (!sendBtn || !messageInput || !usernameInput || !messagesContainer) return;
+
+    // Track user scroll behavior
+    messagesContainer.addEventListener('scroll', function() {
+        const isNearBottom = messagesContainer.scrollHeight - messagesContainer.scrollTop - messagesContainer.clientHeight < 100;
+        shouldAutoScroll = isNearBottom;
+        userScrollPosition = messagesContainer.scrollTop;
+    });
 
     // Load existing messages
     loadChatMessages();
 
-    // Start polling for new messages
-    chatPollingInterval = setInterval(loadChatMessages, 3000);
+    // Start adaptive polling for new messages
+    startChatPolling();
+}
+
+function startChatPolling() {
+    // Clear existing interval
+    if (chatPollingInterval) {
+        clearInterval(chatPollingInterval);
+    }
+    
+    // Adaptive polling: faster when active, slower when idle
+    chatPollingInterval = setInterval(() => {
+        loadChatMessages();
+        // Increase interval gradually if no new messages (max 10 seconds)
+        if (pollingInterval < 10000) {
+            pollingInterval = Math.min(pollingInterval + 500, 10000);
+        }
+    }, pollingInterval);
+}
+
+function stopChatPolling() {
+    if (chatPollingInterval) {
+        clearInterval(chatPollingInterval);
+        chatPollingInterval = null;
+    }
+}
 
     // Send message on button click
     sendBtn.addEventListener('click', sendMessage);
@@ -337,11 +527,10 @@ function loadChatMessages() {
                         
                         const textSpan = document.createElement('span');
                         textSpan.className = 'chat-text';
-                        textSpan.textContent = msg.message;
+                        // Support emojis and basic HTML
+                        textSpan.innerHTML = escapeHtml(msg.message).replace(/(\r\n|\n|\r)/g, '<br>');
                         
-                        const timeSpan = document.createElement('span');
-                        timeSpan.className = 'chat-time';
-                        timeSpan.textContent = formatTimestamp(msg.timestamp);
+                        const timeSpan = createTimestampElement(msg.timestamp);
                         
                         messageDiv.appendChild(usernameSpan);
                         messageDiv.appendChild(textSpan);
@@ -349,8 +538,16 @@ function loadChatMessages() {
                         messagesContainer.appendChild(messageDiv);
                     });
                     
-                    // Auto-scroll to bottom
-                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                    // Intelligent auto-scroll: only scroll if user is near bottom
+                    if (shouldAutoScroll) {
+                        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                    }
+                    
+                    // Reset polling interval if new messages
+                    if (data.messages.length > lastMessageCount) {
+                        pollingInterval = 3000; // Reset to fast polling
+                    }
+                    
                     lastMessageCount = data.messages.length;
                 }
             }
@@ -371,7 +568,7 @@ function sendMessage() {
     const message = messageInput.value.trim();
     
     if (!username || !message) {
-        alert('Please enter both your name and a message');
+        toast.warning('Please enter both your name and a message');
         return;
     }
     
@@ -405,15 +602,17 @@ function sendMessage() {
             messageInput.value = '';
             // Reload messages immediately
             loadChatMessages();
-            // Show success feedback (visual, not alert)
-            showChatFeedback('Message sent!', 'success');
+            // Show success feedback
+            toast.success('Message sent!');
+            // Reset polling to fast
+            pollingInterval = 3000;
         } else {
             throw new Error(data.error || 'Unknown error');
         }
     })
     .catch(error => {
         console.error('Error sending message:', error);
-        showChatFeedback(error.message || 'Error sending message. Please try again.', 'error');
+        toast.error(error.message || 'Error sending message. Please try again.');
     })
     .finally(() => {
         sendBtn.disabled = false;
@@ -422,46 +621,54 @@ function sendMessage() {
     });
 }
 
-function showChatFeedback(message, type) {
-    const chatContainer = document.querySelector('.chat-container');
-    if (!chatContainer) return;
-    
-    // Remove existing feedback
-    const existingFeedback = chatContainer.querySelector('.chat-feedback');
-    if (existingFeedback) {
-        existingFeedback.remove();
-    }
-    
-    const feedback = document.createElement('div');
-    feedback.className = `chat-feedback chat-feedback-${type}`;
-    feedback.textContent = message;
-    feedback.setAttribute('role', 'alert');
-    feedback.setAttribute('aria-live', 'polite');
-    
-    chatContainer.insertBefore(feedback, chatContainer.firstChild);
-    
-    // Auto-remove after 3 seconds
-    setTimeout(() => {
-        feedback.remove();
-    }, 3000);
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
 }
 
 function formatTimestamp(timestamp) {
-    const date = new Date(timestamp * 1000);
-    const now = new Date();
-    const diff = now - date;
+    if (!timestamp) return '';
     
-    if (diff < 60000) { // Less than 1 minute
-        return 'Just now';
-    } else if (diff < 3600000) { // Less than 1 hour
-        const minutes = Math.floor(diff / 60000);
-        return minutes + ' minute' + (minutes > 1 ? 's' : '') + ' ago';
-    } else if (diff < 86400000) { // Less than 1 day
-        const hours = Math.floor(diff / 3600000);
-        return hours + ' hour' + (hours > 1 ? 's' : '') + ' ago';
+    const now = Date.now();
+    const messageTime = timestamp * 1000; // Convert to milliseconds
+    const diff = now - messageTime;
+    
+    const seconds = Math.floor(diff / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+    
+    let relativeTime;
+    if (seconds < 60) {
+        relativeTime = 'just now';
+    } else if (minutes < 60) {
+        relativeTime = `${minutes}m ago`;
+    } else if (hours < 24) {
+        relativeTime = `${hours}h ago`;
+    } else if (days < 7) {
+        relativeTime = `${days}d ago`;
     } else {
-        return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+        const date = new Date(messageTime);
+        relativeTime = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
     }
+    
+    return relativeTime;
+}
+
+function createTimestampElement(timestamp) {
+    const timeSpan = document.createElement('span');
+    timeSpan.className = 'chat-time';
+    timeSpan.textContent = formatTimestamp(timestamp);
+    const date = new Date(timestamp * 1000);
+    timeSpan.setAttribute('title', date.toLocaleString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    }));
+    return timeSpan;
 }
 
 // Scroll to top button
@@ -475,14 +682,29 @@ function initializeScrollToTop() {
     scrollButton.style.display = 'none';
     document.body.appendChild(scrollButton);
     
-    // Show/hide button based on scroll position
-    window.addEventListener('scroll', function() {
+    // Debounce function
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+    
+    // Show/hide button based on scroll position (with debounce)
+    const handleScroll = debounce(function() {
         if (window.pageYOffset > 300) {
             scrollButton.style.display = 'block';
         } else {
             scrollButton.style.display = 'none';
         }
-    });
+    }, 100); // 100ms debounce
+    
+    window.addEventListener('scroll', handleScroll);
     
     // Scroll to top on click
     scrollButton.addEventListener('click', function() {

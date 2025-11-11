@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <?php
+    // Load configuration for dynamic URLs
+    require_once __DIR__ . '/config.php';
+    $siteUrl = rtrim(SITE_URL, '/');
+    $siteDomain = SITE_DOMAIN;
+    ?>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cyber Mathrock - Software Engineer & Music</title>
@@ -10,21 +16,21 @@
     <meta name="keywords" content="software engineer, musician, guitar, programming, portfolio, cyber mathrock">
     <meta name="author" content="Cyber Mathrock">
     <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://cybermathrock.com/">
+    <link rel="canonical" href="<?php echo htmlspecialchars($siteUrl); ?>/">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://cybermathrock.com/">
+    <meta property="og:url" content="<?php echo htmlspecialchars($siteUrl); ?>/">
     <meta property="og:title" content="Cyber Mathrock - Software Engineer & Music">
     <meta property="og:description" content="Personal website of Cyber Mathrock - Software Engineer & Musician. Portfolio, skills, music covers, and blog.">
-    <meta property="og:image" content="https://cybermathrock.com/images/og-image.jpg">
+    <meta property="og:image" content="<?php echo htmlspecialchars($siteUrl); ?>/images/og-image.jpg">
     
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:url" content="https://cybermathrock.com/">
+    <meta name="twitter:url" content="<?php echo htmlspecialchars($siteUrl); ?>/">
     <meta name="twitter:title" content="Cyber Mathrock - Software Engineer & Music">
     <meta name="twitter:description" content="Personal website of Cyber Mathrock - Software Engineer & Musician. Portfolio, skills, music covers, and blog.">
-    <meta name="twitter:image" content="https://cybermathrock.com/images/og-image.jpg">
+    <meta name="twitter:image" content="<?php echo htmlspecialchars($siteUrl); ?>/images/og-image.jpg">
     
     <!-- Resource Hints -->
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
@@ -43,7 +49,7 @@
         "@type": "Person",
         "name": "Cyber Mathrock",
         "jobTitle": "Software Engineer & Musician",
-        "url": "https://cybermathrock.com",
+        "url": "<?php echo htmlspecialchars($siteUrl); ?>",
         "sameAs": [
             "https://github.com/guicybercode",
             "https://www.linkedin.com/in/guilherme-monteiro-3653b51a7/",
@@ -61,7 +67,7 @@
         "@context": "https://schema.org",
         "@type": "WebSite",
         "name": "Cyber Mathrock",
-        "url": "https://cybermathrock.com",
+        "url": "<?php echo htmlspecialchars($siteUrl); ?>",
         "author": {
             "@type": "Person",
             "name": "Cyber Mathrock"
@@ -69,8 +75,7 @@
     }
     </script>
     
-    <!-- Chart.js with defer -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+    <!-- Chart.js will be loaded dynamically when skills section is visible -->
 </head>
 <body>
     <!-- Skip to main content link -->
@@ -85,6 +90,11 @@
                     <span class="logo-mathrock">MATHROCK</span>
                 </div>
             </div>
+            <button class="mobile-menu-toggle" aria-label="Toggle mobile menu" aria-expanded="false">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
             <ul class="nav-links">
                 <li><a href="#about" aria-label="Navigate to About section">About</a></li>
                 <li><a href="#professional" aria-label="Navigate to Professional section">Professional</a></li>
@@ -283,6 +293,7 @@
         <p>&copy; 2025 Cyber Mathrock. Software Engineer & Music</p>
     </footer>
 
+    <script src="js/toast.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>
