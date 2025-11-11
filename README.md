@@ -135,8 +135,9 @@ The skills radar chart displays 8 diverse skills. You can modify the data in `js
 
 ### Adding YouTube Videos
 
+To add a YouTube video to the Music section:
 1. Get your YouTube video ID from the URL (e.g., `dQw4w9WgXcQ` from `https://youtube.com/watch?v=dQw4w9WgXcQ`)
-2. Replace `VIDEO_ID` in the Music & Videos section with your actual video ID
+2. Replace `VIDEO_ID` in `index.php` (Music section) with your actual video ID
 
 ## 🎨 Customization
 
