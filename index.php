@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Guilherme - Software Engineer & Musician</title>
     <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <!-- Top Navigation Bar -->
@@ -116,6 +117,18 @@
                     </ul>
 
                     <p>My approach combines deep technical knowledge with practical problem-solving, always seeking to build scalable and efficient solutions.</p>
+
+                    <!-- Skills Visualization -->
+                    <h3>Skills Overview</h3>
+                    <div class="skills-container">
+                        <canvas id="skillsChart"></canvas>
+                    </div>
+
+                    <!-- GitHub Contributions Graph -->
+                    <h3>GitHub Activity</h3>
+                    <div class="github-graph-container">
+                        <img src="https://ghchart.rshah.org/guicybercode" alt="GitHub Contributions" class="github-graph" loading="lazy">
+                    </div>
                 </section>
 
                 <!-- Portfolio Section -->

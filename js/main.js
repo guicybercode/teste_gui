@@ -3,6 +3,8 @@ document.addEventListener('DOMContentLoaded', function() {
     initializePortfolio();
     initializeChat();
     initializeLazyLoading();
+    initializeSkillsChart();
+    initializeScrollAnimations();
 });
 
 // GitHub Portfolio
@@ -79,6 +81,114 @@ function initializeLazyLoading() {
             img.removeAttribute('data-src');
         });
     }
+}
+
+// Skills Visualization Chart
+function initializeSkillsChart() {
+    const canvas = document.getElementById('skillsChart');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    
+    new Chart(ctx, {
+        type: 'radar',
+        data: {
+            labels: ['Rust', 'C/C++', 'Python', 'TypeScript', 'Java', 'Cloud', 'Linux', 'Systems'],
+            datasets: [{
+                label: 'Skill Level',
+                data: [85, 80, 75, 80, 70, 75, 85, 80],
+                backgroundColor: 'rgba(106, 183, 255, 0.2)',
+                borderColor: 'rgba(106, 183, 255, 0.8)',
+                borderWidth: 2,
+                pointBackgroundColor: 'rgba(106, 183, 255, 1)',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: 'rgba(106, 183, 255, 1)'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            scales: {
+                r: {
+                    beginAtZero: true,
+                    max: 100,
+                    ticks: {
+                        stepSize: 20,
+                        color: '#999999',
+                        font: {
+                            size: 11
+                        }
+                    },
+                    grid: {
+                        color: '#404040'
+                    },
+                    pointLabels: {
+                        color: '#e0e0e0',
+                        font: {
+                            size: 12,
+                            family: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+                        }
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(26, 26, 26, 0.9)',
+                    titleColor: '#ffffff',
+                    bodyColor: '#e0e0e0',
+                    borderColor: '#404040',
+                    borderWidth: 1
+                }
+            }
+        }
+    });
+}
+
+// Scroll Animations
+function initializeScrollAnimations() {
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('fade-in-visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    // Observe all sections
+    document.querySelectorAll('section').forEach(section => {
+        section.classList.add('fade-in');
+        observer.observe(section);
+    });
+
+    // Observe portfolio items
+    const portfolioObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting) {
+                setTimeout(() => {
+                    entry.target.classList.add('fade-in-visible');
+                }, index * 100);
+                portfolioObserver.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    // Observe portfolio items after they're loaded
+    setTimeout(() => {
+        document.querySelectorAll('.portfolio-item').forEach(item => {
+            item.classList.add('fade-in');
+            portfolioObserver.observe(item);
+        });
+    }, 1000);
 }
 
 // Chat functionality
