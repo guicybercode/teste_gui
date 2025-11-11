@@ -13,41 +13,72 @@ async function initializePortfolio() {
     if (!portfolioContainer) return;
 
     try {
-        const response = await fetch('https://api.github.com/users/guicybercode/repos?sort=updated&per_page=12');
-        const repos = await response.json();
+        // GraphQL query to fetch pinned repositories
+        const query = `
+            {
+                user(login: "guicybercode") {
+                    pinnedItems(first: 6, types: REPOSITORY) {
+                        nodes {
+                            ... on Repository {
+                                name
+                                description
+                                url
+                                languages(first: 1) {
+                                    nodes {
+                                        name
+                                    }
+                                }
+                                stargazerCount
+                            }
+                        }
+                    }
+                }
+            }
+        `;
 
-        if (!Array.isArray(repos)) {
-            throw new Error('Invalid response from GitHub API');
+        const response = await fetch('https://api.github.com/graphql', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ query })
+        });
+
+        const data = await response.json();
+
+        if (data.errors) {
+            throw new Error(data.errors[0].message || 'GraphQL error');
         }
+
+        const repos = data.data?.user?.pinnedItems?.nodes || [];
 
         portfolioContainer.innerHTML = '';
 
-        repos.forEach(repo => {
-            if (repo.fork) return; // Skip forked repositories
+        if (repos.length === 0) {
+            portfolioContainer.innerHTML = '<p>No pinned repositories found.</p>';
+            return;
+        }
 
+        repos.forEach(repo => {
             const repoCard = document.createElement('div');
             repoCard.className = 'portfolio-item';
 
-            const languages = repo.language || 'N/A';
-            const stars = repo.stargazers_count || 0;
+            const language = repo.languages?.nodes?.[0]?.name || 'N/A';
+            const stars = repo.stargazerCount || 0;
             const description = repo.description || 'No description available.';
 
             repoCard.innerHTML = `
-                <h3><a href="${repo.html_url}" target="_blank">${repo.name}</a></h3>
+                <h3><a href="${repo.url}" target="_blank">${repo.name}</a></h3>
                 <p class="portfolio-description">${description}</p>
                 <div class="portfolio-meta">
-                    <span class="portfolio-language">${languages}</span>
+                    <span class="portfolio-language">${language}</span>
                     <span class="portfolio-stars">⭐ ${stars}</span>
                 </div>
-                <a href="${repo.html_url}" target="_blank" class="portfolio-link">View on GitHub →</a>
+                <a href="${repo.url}" target="_blank" class="portfolio-link">View on GitHub →</a>
             `;
 
             portfolioContainer.appendChild(repoCard);
         });
-
-        if (repos.length === 0) {
-            portfolioContainer.innerHTML = '<p>No repositories found.</p>';
-        }
     } catch (error) {
         console.error('Error loading GitHub repositories:', error);
         portfolioContainer.innerHTML = '<p>Unable to load projects. Please check your connection or try again later.</p>';

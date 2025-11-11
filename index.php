@@ -123,12 +123,6 @@
                     <div class="skills-container">
                         <canvas id="skillsChart"></canvas>
                     </div>
-
-                    <!-- GitHub Contributions Graph -->
-                    <h3>GitHub Activity</h3>
-                    <div class="github-graph-container">
-                        <img src="https://ghchart.rshah.org/guicybercode" alt="GitHub Contributions" class="github-graph" loading="lazy">
-                    </div>
                 </section>
 
                 <!-- Portfolio Section -->
