@@ -1,14 +1,18 @@
 :root {
-    --bg-primary: #2d2d2d;
-    --bg-secondary: #3a3a3a;
-    --bg-tertiary: #4a4a4a;
-    --bg-card: #353535;
-    --text-primary: #ffffff;
-    --text-secondary: #e8e8e8;
-    --text-muted: #b0b0b0;
-    --border-color: #555555;
-    --link-color: #7d9bc1;
-    --link-hover: #9bb5d4;
+    --bg-primary: #faf8f3;
+    --bg-secondary: #ffffff;
+    --bg-tertiary: #f5f3ed;
+    --bg-card: #ffffff;
+    --text-primary: #2d2d2d;
+    --text-secondary: #4a4a4a;
+    --text-muted: #7a7a7a;
+    --border-color: #e8e5df;
+    --link-color: #6b9bd1;
+    --link-hover: #8bb3d9;
+    --accent-soft: #e8d5c4;
+    --accent-blue: #a8c5e0;
+    --shadow-soft: rgba(0, 0, 0, 0.05);
+    --shadow-medium: rgba(0, 0, 0, 0.08);
 }
 
 * {
@@ -33,6 +37,7 @@ body {
     position: sticky;
     top: 0;
     z-index: 1000;
+    box-shadow: 0 2px 8px var(--shadow-soft);
 }
 
 .nav-container {
@@ -188,6 +193,7 @@ body {
     margin: 0 0 1.5rem 2rem;
     font-size: 0.9rem;
     clear: right;
+    box-shadow: 0 2px 8px var(--shadow-soft);
 }
 
 .infobox h2 {
@@ -312,11 +318,13 @@ body {
     border: 1px solid var(--border-color);
     padding: 1.5rem;
     transition: all 0.3s ease;
+    box-shadow: 0 2px 6px var(--shadow-soft);
 }
 
 .portfolio-item:hover {
     border-color: var(--link-color);
     transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--shadow-medium);
 }
 
 .portfolio-item h3 {
@@ -393,6 +401,7 @@ body {
     border: 1px solid var(--border-color);
     padding: 1.5rem;
     margin-top: 1rem;
+    box-shadow: 0 2px 8px var(--shadow-soft);
 }
 
 .chat-messages {
@@ -410,6 +419,12 @@ body {
     padding: 0.75rem;
     background: var(--bg-secondary);
     border-left: 3px solid var(--link-color);
+    box-shadow: 0 1px 4px var(--shadow-soft);
+    transition: all 0.2s ease;
+}
+
+.chat-message:hover {
+    box-shadow: 0 2px 6px var(--shadow-medium);
 }
 
 .chat-username {
@@ -458,17 +473,20 @@ body {
 .chat-input-container button {
     padding: 0.75rem 1.5rem;
     background: var(--link-color);
-    color: var(--bg-primary);
+    color: #ffffff;
     border: none;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     font-size: 0.9rem;
     font-weight: 600;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 6px var(--shadow-soft);
 }
 
 .chat-input-container button:hover {
     background: var(--link-hover);
+    box-shadow: 0 4px 10px var(--shadow-medium);
+    transform: translateY(-1px);
 }
 
 .chat-input-container button:disabled {
@@ -665,11 +683,12 @@ body {
     justify-content: center;
     position: relative;
     transition: all 0.3s ease;
+    box-shadow: 0 2px 10px var(--shadow-soft);
 }
 
 .skills-container:hover {
     border-color: var(--link-color);
-    box-shadow: 0 0 20px rgba(125, 155, 193, 0.2);
+    box-shadow: 0 4px 20px var(--shadow-medium);
 }
 
 .skills-container canvas {
@@ -684,6 +703,7 @@ body {
     padding: 1rem;
     margin: 1.5rem 0;
     text-align: center;
+    box-shadow: 0 2px 8px var(--shadow-soft);
 }
 
 .github-graph {
@@ -704,14 +724,15 @@ body {
     width: 100%;
     min-height: 350px;
     max-width: 800px;
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    margin: 2rem 0;
+    background: linear-gradient(135deg, var(--bg-tertiary) 0%, var(--bg-card) 100%);
+    border: 1px dashed var(--border-color);
+    margin: 2rem auto;
     display: flex;
     align-items: center;
     justify-content: center;
     color: var(--text-muted);
     font-style: italic;
+    box-shadow: 0 2px 8px var(--shadow-soft);
 }
 
 .photo-placeholder::before {
