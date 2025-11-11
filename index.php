@@ -123,10 +123,6 @@
         <main class="main-content" id="main-content" role="main">
             <!-- Article Header -->
             <header class="article-header">
-                <div class="logo-container main-logo">
-                    <span class="logo-cyber">CYBER</span>
-                    <span class="logo-mathrock">MATHROCK</span>
-                </div>
                 <p class="subtitle">Software Engineer & Music</p>
             </header>
 
