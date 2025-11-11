@@ -128,13 +128,13 @@ function initializeSkillsChart() {
             datasets: [{
                 label: 'Skill Level',
                 data: [85, 80, 75, 80, 70, 85, 75, 85],
-                backgroundColor: 'rgba(107, 155, 209, 0.15)',
-                borderColor: 'rgba(107, 155, 209, 0.8)',
+                backgroundColor: 'rgba(255, 107, 53, 0.15)',
+                borderColor: 'rgba(255, 107, 53, 0.8)',
                 borderWidth: 2,
-                pointBackgroundColor: 'rgba(107, 155, 209, 1)',
+                pointBackgroundColor: 'rgba(255, 107, 53, 1)',
                 pointBorderColor: '#ffffff',
                 pointHoverBackgroundColor: '#ffffff',
-                pointHoverBorderColor: 'rgba(107, 155, 209, 1)'
+                pointHoverBorderColor: 'rgba(255, 107, 53, 1)'
             }]
         },
         options: {

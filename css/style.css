@@ -7,10 +7,10 @@
     --text-secondary: #4a4a4a;
     --text-muted: #7a7a7a;
     --border-color: #e8e5df;
-    --link-color: #6b9bd1;
-    --link-hover: #8bb3d9;
+    --link-color: #ff6b35;
+    --link-hover: #ff8c5a;
     --accent-soft: #e8d5c4;
-    --accent-blue: #a8c5e0;
+    --accent-orange: #ffb88c;
     --shadow-soft: rgba(0, 0, 0, 0.05);
     --shadow-medium: rgba(0, 0, 0, 0.08);
 }
