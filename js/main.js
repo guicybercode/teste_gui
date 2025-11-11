@@ -13,7 +13,7 @@ async function initializePortfolio() {
     if (!portfolioContainer) return;
 
     try {
-        // GraphQL query to fetch pinned repositories
+        // Try GraphQL API first for pinned repositories
         const query = `
             {
                 user(login: "guicybercode") {
@@ -36,7 +36,7 @@ async function initializePortfolio() {
             }
         `;
 
-        const response = await fetch('https://api.github.com/graphql', {
+        const graphqlResponse = await fetch('https://api.github.com/graphql', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -44,37 +44,76 @@ async function initializePortfolio() {
             body: JSON.stringify({ query })
         });
 
-        const data = await response.json();
+        const graphqlData = await graphqlResponse.json();
 
-        if (data.errors) {
-            throw new Error(data.errors[0].message || 'GraphQL error');
+        // If GraphQL works, use it
+        if (!graphqlData.errors && graphqlData.data?.user?.pinnedItems?.nodes) {
+            const repos = graphqlData.data.user.pinnedItems.nodes;
+            
+            portfolioContainer.innerHTML = '';
+
+            if (repos.length === 0) {
+                portfolioContainer.innerHTML = '<p>No pinned repositories found.</p>';
+                return;
+            }
+
+            repos.forEach(repo => {
+                const repoCard = document.createElement('div');
+                repoCard.className = 'portfolio-item';
+
+                const language = repo.languages?.nodes?.[0]?.name || 'N/A';
+                const stars = repo.stargazerCount || 0;
+                const description = repo.description || 'No description available.';
+
+                repoCard.innerHTML = `
+                    <h3><a href="${repo.url}" target="_blank">${repo.name}</a></h3>
+                    <p class="portfolio-description">${description}</p>
+                    <div class="portfolio-meta">
+                        <span class="portfolio-language">${language}</span>
+                        <span class="portfolio-stars">⭐ ${stars}</span>
+                    </div>
+                    <a href="${repo.url}" target="_blank" class="portfolio-link">View on GitHub →</a>
+                `;
+
+                portfolioContainer.appendChild(repoCard);
+            });
+            return;
         }
 
-        const repos = data.data?.user?.pinnedItems?.nodes || [];
+        // Fallback to REST API if GraphQL fails
+        console.log('GraphQL failed, using REST API fallback');
+        const response = await fetch('https://api.github.com/users/guicybercode/repos?sort=updated&per_page=6');
+        const repos = await response.json();
+
+        if (!Array.isArray(repos)) {
+            throw new Error('Invalid response from GitHub API');
+        }
 
         portfolioContainer.innerHTML = '';
 
         if (repos.length === 0) {
-            portfolioContainer.innerHTML = '<p>No pinned repositories found.</p>';
+            portfolioContainer.innerHTML = '<p>No repositories found.</p>';
             return;
         }
 
         repos.forEach(repo => {
+            if (repo.fork) return; // Skip forked repositories
+
             const repoCard = document.createElement('div');
             repoCard.className = 'portfolio-item';
 
-            const language = repo.languages?.nodes?.[0]?.name || 'N/A';
-            const stars = repo.stargazerCount || 0;
+            const languages = repo.language || 'N/A';
+            const stars = repo.stargazers_count || 0;
             const description = repo.description || 'No description available.';
 
             repoCard.innerHTML = `
-                <h3><a href="${repo.url}" target="_blank">${repo.name}</a></h3>
+                <h3><a href="${repo.html_url}" target="_blank">${repo.name}</a></h3>
                 <p class="portfolio-description">${description}</p>
                 <div class="portfolio-meta">
-                    <span class="portfolio-language">${language}</span>
+                    <span class="portfolio-language">${languages}</span>
                     <span class="portfolio-stars">⭐ ${stars}</span>
                 </div>
-                <a href="${repo.url}" target="_blank" class="portfolio-link">View on GitHub →</a>
+                <a href="${repo.html_url}" target="_blank" class="portfolio-link">View on GitHub →</a>
             `;
 
             portfolioContainer.appendChild(repoCard);
