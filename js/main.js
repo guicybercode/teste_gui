@@ -15,10 +15,11 @@ function initializeCharts() {
             datasets: [{
                 label: 'Sales (in thousands)',
                 data: [12, 19, 15, 25, 22, 30, 28, 35, 32, 40, 38, 45],
-                borderColor: 'rgb(102, 126, 234)',
-                backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                borderColor: 'rgba(255, 255, 255, 0.9)',
+                backgroundColor: 'rgba(255, 255, 255, 0.1)',
                 tension: 0.4,
-                fill: true
+                fill: true,
+                borderWidth: 2
             }]
         },
         options: {
@@ -27,12 +28,32 @@ function initializeCharts() {
             plugins: {
                 legend: {
                     display: true,
-                    position: 'top'
+                    position: 'top',
+                    labels: {
+                        color: '#e0e0e0',
+                        font: {
+                            size: 12
+                        }
+                    }
                 }
             },
             scales: {
                 y: {
-                    beginAtZero: true
+                    beginAtZero: true,
+                    ticks: {
+                        color: '#999999'
+                    },
+                    grid: {
+                        color: '#404040'
+                    }
+                },
+                x: {
+                    ticks: {
+                        color: '#999999'
+                    },
+                    grid: {
+                        color: '#404040'
+                    }
                 }
             }
         }
@@ -48,18 +69,18 @@ function initializeCharts() {
                 label: 'Units Sold',
                 data: [65, 59, 80, 81, 56],
                 backgroundColor: [
-                    'rgba(102, 126, 234, 0.8)',
-                    'rgba(118, 75, 162, 0.8)',
-                    'rgba(102, 126, 234, 0.6)',
-                    'rgba(118, 75, 162, 0.6)',
-                    'rgba(102, 126, 234, 0.4)'
+                    'rgba(255, 255, 255, 0.8)',
+                    'rgba(224, 224, 224, 0.8)',
+                    'rgba(255, 255, 255, 0.6)',
+                    'rgba(224, 224, 224, 0.6)',
+                    'rgba(255, 255, 255, 0.4)'
                 ],
                 borderColor: [
-                    'rgb(102, 126, 234)',
-                    'rgb(118, 75, 162)',
-                    'rgb(102, 126, 234)',
-                    'rgb(118, 75, 162)',
-                    'rgb(102, 126, 234)'
+                    'rgba(255, 255, 255, 1)',
+                    'rgba(224, 224, 224, 1)',
+                    'rgba(255, 255, 255, 1)',
+                    'rgba(224, 224, 224, 1)',
+                    'rgba(255, 255, 255, 1)'
                 ],
                 borderWidth: 2
             }]
@@ -70,12 +91,32 @@ function initializeCharts() {
             plugins: {
                 legend: {
                     display: true,
-                    position: 'top'
+                    position: 'top',
+                    labels: {
+                        color: '#e0e0e0',
+                        font: {
+                            size: 12
+                        }
+                    }
                 }
             },
             scales: {
                 y: {
-                    beginAtZero: true
+                    beginAtZero: true,
+                    ticks: {
+                        color: '#999999'
+                    },
+                    grid: {
+                        color: '#404040'
+                    }
+                },
+                x: {
+                    ticks: {
+                        color: '#999999'
+                    },
+                    grid: {
+                        color: '#404040'
+                    }
                 }
             }
         }
@@ -90,12 +131,12 @@ function initializeCharts() {
             datasets: [{
                 data: [30, 25, 25, 20],
                 backgroundColor: [
-                    'rgba(102, 126, 234, 0.8)',
-                    'rgba(118, 75, 162, 0.8)',
-                    'rgba(102, 126, 234, 0.6)',
-                    'rgba(118, 75, 162, 0.6)'
+                    'rgba(255, 255, 255, 0.8)',
+                    'rgba(224, 224, 224, 0.8)',
+                    'rgba(255, 255, 255, 0.6)',
+                    'rgba(224, 224, 224, 0.6)'
                 ],
-                borderColor: '#fff',
+                borderColor: '#2a2a2a',
                 borderWidth: 2
             }]
         },
@@ -105,7 +146,14 @@ function initializeCharts() {
             plugins: {
                 legend: {
                     display: true,
-                    position: 'right'
+                    position: 'right',
+                    labels: {
+                        color: '#e0e0e0',
+                        font: {
+                            size: 12
+                        },
+                        padding: 15
+                    }
                 }
             }
         }
