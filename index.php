@@ -92,31 +92,25 @@
                 <!-- About Me Section -->
                 <section id="about">
                     <h2>About Me</h2>
-                    <p>Guilherme is a Brazilian software engineer and musician currently pursuing degrees in Information Systems. His work bridges low-level programming (C, Rust), Linux systems (Gentoo, NixOS), and scalable development with Java, Python, TypeScript, and C#. He's experienced with cloud platforms like AWS, Azure, and Oracle OCI.</p>
-                    <p>Fluent in Portuguese and English, and conversational in Korean, Thai, and Icelandic, Guilherme connects deeply with global cultures. As a composer and performer, he blends technical precision with creative intuition. Guided by purpose, clarity, and ethics, he brings a multidimensional approach to technology and life.</p>
+                    <p>Brazilian software engineer and musician pursuing Information Systems. I bridge low-level programming (C, Rust), Linux systems (Gentoo, NixOS), and scalable development with Java, Python, TypeScript, and C#. Experienced with AWS, Azure, and Oracle OCI.</p>
+                    <p>Fluent in Portuguese and English, conversational in Korean, Thai, and Icelandic. As a composer and performer, I blend technical precision with creative intuition.</p>
+                    
+                    <!-- Photo placeholder -->
+                    <div class="photo-placeholder"></div>
                 </section>
 
                 <!-- Professional Background Section -->
                 <section id="professional">
                     <h2>Professional Background</h2>
-                    <p>My technical journey spans from low-level systems programming to high-level application development. I work extensively with:</p>
+                    <p>My technical journey spans from low-level systems programming to high-level application development.</p>
                     
-                    <h3>Programming Languages</h3>
+                    <h3>Technologies</h3>
                     <ul>
                         <li><strong>Low-level:</strong> C, Rust</li>
                         <li><strong>Systems:</strong> Linux (Gentoo, NixOS)</li>
-                        <li><strong>Application Development:</strong> Java, Python, TypeScript, C#</li>
+                        <li><strong>Application:</strong> Java, Python, TypeScript, C#</li>
+                        <li><strong>Cloud:</strong> AWS, Azure, Oracle OCI</li>
                     </ul>
-
-                    <h3>Cloud Platforms</h3>
-                    <p>I have experience working with major cloud platforms including:</p>
-                    <ul>
-                        <li>AWS (Amazon Web Services)</li>
-                        <li>Microsoft Azure</li>
-                        <li>Oracle Cloud Infrastructure (OCI)</li>
-                    </ul>
-
-                    <p>My approach combines deep technical knowledge with practical problem-solving, always seeking to build scalable and efficient solutions.</p>
 
                     <!-- Skills Visualization -->
                     <h3>Skills Overview</h3>
@@ -134,7 +128,7 @@
                 <!-- Portfolio Section -->
                 <section id="portfolio">
                     <h2>Portfolio</h2>
-                    <p>Here are some of my projects from GitHub:</p>
+                    <p>Some of my projects from GitHub:</p>
                     <div id="portfolio-container" class="portfolio-grid">
                         <div class="portfolio-loading">Loading projects...</div>
                     </div>
@@ -143,46 +137,39 @@
                 <!-- Music & Creativity Section -->
                 <section id="music">
                     <h2>Music & Creativity</h2>
-                    <p>Music is a core part of my identity. I'm a musician who explores sound as both emotional expression and structured design. I compose, perform, and experiment with digital and analog tools — often blending my technical background with creative intuition.</p>
+                    <p>Music is a core part of my identity. I compose, perform, and experiment with digital and analog tools, blending my technical background with creative intuition.</p>
                     
                     <h3>Guitar</h3>
-                    <p>I play both 6-string and 7-string guitars, exploring a wide range of musical styles and techniques. The extended range of the 7-string guitar allows me to explore deeper tonalities and more complex harmonic structures in my compositions.</p>
+                    <p>I play both 6-string and 7-string guitars, exploring various musical styles and techniques. The extended range allows for deeper tonalities and complex harmonic structures.</p>
                     
-                    <p>As a composer and performer, I blend technical precision with creative intuition, creating music that reflects both my analytical mindset and my passion for artistic expression.</p>
+                    <!-- Photo placeholder for guitar/music -->
+                    <div class="photo-placeholder"></div>
                 </section>
 
                 <!-- Languages & Culture Section -->
                 <section id="languages">
                     <h2>Languages & Culture</h2>
-                    <p>Language learning is one of my great passions. I'm fluent in Portuguese (my native language) and English, and conversational in Korean, Thai, and Icelandic. This multilingual ability allows me to connect deeply with global cultures and understand different perspectives.</p>
+                    <p>Language learning is one of my passions. Fluent in Portuguese and English, conversational in Korean, Thai, and Icelandic. This multilingual ability helps me connect with global cultures and approach problems from multiple perspectives.</p>
                     
-                    <h3>Korean Language</h3>
-                    <p>Korean holds a special place in my language journey. My conversational ability in Korean reflects my interest in Korean culture, technology, and the connections between language and thought.</p>
-                    
-                    <h3>Cultural Connection</h3>
-                    <p>Through languages, I've developed a deep appreciation for different cultures, which enriches both my personal life and my professional work. This cultural awareness helps me approach problems from multiple angles and communicate effectively in diverse environments.</p>
+                    <!-- Photo placeholder -->
+                    <div class="photo-placeholder"></div>
                 </section>
 
                 <!-- Reading & Learning Section -->
                 <section id="reading">
                     <h2>Reading & Learning</h2>
-                    <p>I have a great habit of reading, which has been fundamental to my growth both personally and professionally. Reading allows me to continuously learn, explore new ideas, and stay informed about developments in technology, music, culture, and faith.</p>
-                    
-                    <p>This commitment to lifelong learning drives my curiosity and helps me stay current with the rapidly evolving fields of software engineering and music composition.</p>
+                    <p>Reading has been fundamental to my growth. It allows me to continuously learn, explore new ideas, and stay informed about technology, music, culture, and faith.</p>
                 </section>
 
                 <!-- Faith Section -->
                 <section id="faith">
                     <h2>Faith</h2>
-                    <p>My Christian faith is very important to me and forms the foundation of my values and approach to life. It guides my decisions, shapes my relationships, and influences how I view my work and creativity.</p>
-                    
-                    <p>Faith provides me with purpose, clarity, and ethical principles that inform both my technical work and my artistic expression. It's an integral part of who I am and how I engage with the world.</p>
+                    <p>My Christian faith is very important to me and forms the foundation of my values. It guides my decisions, shapes my relationships, and influences how I view my work and creativity.</p>
                 </section>
 
                 <!-- Contact & Links Section -->
                 <section id="contact">
                     <h2>Connect</h2>
-                    <p>Feel free to reach out or connect with me:</p>
                     <ul>
                         <li><strong>GitHub:</strong> <a href="https://github.com/guicybercode" target="_blank">github.com/guicybercode</a></li>
                         <li><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/guilherme-monteiro-3653b51a7/" target="_blank">linkedin.com/in/guilherme-monteiro-3653b51a7</a></li>
