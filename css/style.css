@@ -296,32 +296,91 @@ body {
     max-height: 400px;
 }
 
-/* Gallery */
-.gallery {
+/* Portfolio */
+.portfolio-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 1.5rem;
     margin-top: 1rem;
 }
 
-.gallery-item {
+.portfolio-item {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
-    padding: 0.5rem;
-    margin: 0;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
 }
 
-.gallery-item img {
-    width: 100%;
-    height: auto;
-    display: block;
+.portfolio-item:hover {
+    border-color: var(--link-color);
+    transform: translateY(-2px);
 }
 
-.gallery-item figcaption {
+.portfolio-item h3 {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.75rem;
+}
+
+.portfolio-item h3 a {
+    color: var(--text-primary);
+    text-decoration: none;
+}
+
+.portfolio-item h3 a:hover {
+    color: var(--link-color);
+    text-decoration: underline;
+}
+
+.portfolio-description {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    min-height: 3em;
+}
+
+.portfolio-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border-color);
     font-size: 0.85rem;
+}
+
+.portfolio-language {
     color: var(--text-muted);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.portfolio-stars {
+    color: var(--text-muted);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.portfolio-link {
+    display: inline-block;
+    color: var(--link-color);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    transition: color 0.2s;
+}
+
+.portfolio-link:hover {
+    color: var(--link-hover);
+    text-decoration: underline;
+}
+
+.portfolio-loading {
+    grid-column: 1 / -1;
     text-align: center;
-    padding: 0.5rem 0;
+    color: var(--text-muted);
+    padding: 2rem;
     font-style: italic;
 }
 

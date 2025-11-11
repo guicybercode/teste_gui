@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Guilherme - Software Engineer & Musician</title>
     <link rel="stylesheet" href="css/style.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <!-- Top Navigation Bar -->
@@ -17,6 +16,7 @@
             <ul class="nav-links">
                 <li><a href="#about">About</a></li>
                 <li><a href="#professional">Professional</a></li>
+                <li><a href="#portfolio">Portfolio</a></li>
                 <li><a href="#music">Music</a></li>
                 <li><a href="#languages">Languages</a></li>
                 <li><a href="#chat">Chat</a></li>
@@ -32,6 +32,7 @@
                 <ul class="sidebar-menu">
                     <li><a href="#about">About Me</a></li>
                     <li><a href="#professional">Professional Background</a></li>
+                    <li><a href="#portfolio">Portfolio</a></li>
                     <li><a href="#music">Music & Creativity</a></li>
                     <li><a href="#languages">Languages & Culture</a></li>
                     <li><a href="#reading">Reading & Learning</a></li>
@@ -115,6 +116,15 @@
                     </ul>
 
                     <p>My approach combines deep technical knowledge with practical problem-solving, always seeking to build scalable and efficient solutions.</p>
+                </section>
+
+                <!-- Portfolio Section -->
+                <section id="portfolio">
+                    <h2>Portfolio</h2>
+                    <p>Here are some of my projects from GitHub:</p>
+                    <div id="portfolio-container" class="portfolio-grid">
+                        <div class="portfolio-loading">Loading projects...</div>
+                    </div>
                 </section>
 
                 <!-- Music & Creativity Section -->

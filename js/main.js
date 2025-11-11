@@ -1,163 +1,84 @@
-// Initialize charts when page loads
+// Initialize when page loads
 document.addEventListener('DOMContentLoaded', function() {
-    initializeCharts();
+    initializePortfolio();
     initializeChat();
+    initializeLazyLoading();
 });
 
-// Chart initialization
-function initializeCharts() {
-    // Line Chart - Monthly Sales Trend
-    const lineCtx = document.getElementById('lineChart').getContext('2d');
-    new Chart(lineCtx, {
-        type: 'line',
-        data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-            datasets: [{
-                label: 'Sales (in thousands)',
-                data: [12, 19, 15, 25, 22, 30, 28, 35, 32, 40, 38, 45],
-                borderColor: 'rgba(255, 255, 255, 0.9)',
-                backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                tension: 0.4,
-                fill: true,
-                borderWidth: 2
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: true,
-            plugins: {
-                legend: {
-                    display: true,
-                    position: 'top',
-                    labels: {
-                        color: '#e0e0e0',
-                        font: {
-                            size: 12
-                        }
-                    }
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        color: '#999999'
-                    },
-                    grid: {
-                        color: '#404040'
-                    }
-                },
-                x: {
-                    ticks: {
-                        color: '#999999'
-                    },
-                    grid: {
-                        color: '#404040'
-                    }
-                }
-            }
-        }
-    });
+// GitHub Portfolio
+async function initializePortfolio() {
+    const portfolioContainer = document.getElementById('portfolio-container');
+    if (!portfolioContainer) return;
 
-    // Bar Chart - Product Distribution
-    const barCtx = document.getElementById('barChart').getContext('2d');
-    new Chart(barCtx, {
-        type: 'bar',
-        data: {
-            labels: ['Product A', 'Product B', 'Product C', 'Product D', 'Product E'],
-            datasets: [{
-                label: 'Units Sold',
-                data: [65, 59, 80, 81, 56],
-                backgroundColor: [
-                    'rgba(255, 255, 255, 0.8)',
-                    'rgba(224, 224, 224, 0.8)',
-                    'rgba(255, 255, 255, 0.6)',
-                    'rgba(224, 224, 224, 0.6)',
-                    'rgba(255, 255, 255, 0.4)'
-                ],
-                borderColor: [
-                    'rgba(255, 255, 255, 1)',
-                    'rgba(224, 224, 224, 1)',
-                    'rgba(255, 255, 255, 1)',
-                    'rgba(224, 224, 224, 1)',
-                    'rgba(255, 255, 255, 1)'
-                ],
-                borderWidth: 2
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: true,
-            plugins: {
-                legend: {
-                    display: true,
-                    position: 'top',
-                    labels: {
-                        color: '#e0e0e0',
-                        font: {
-                            size: 12
-                        }
-                    }
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        color: '#999999'
-                    },
-                    grid: {
-                        color: '#404040'
-                    }
-                },
-                x: {
-                    ticks: {
-                        color: '#999999'
-                    },
-                    grid: {
-                        color: '#404040'
-                    }
-                }
-            }
-        }
-    });
+    try {
+        const response = await fetch('https://api.github.com/users/guicybercode/repos?sort=updated&per_page=12');
+        const repos = await response.json();
 
-    // Pie Chart - Category Breakdown
-    const pieCtx = document.getElementById('pieChart').getContext('2d');
-    new Chart(pieCtx, {
-        type: 'pie',
-        data: {
-            labels: ['Category A', 'Category B', 'Category C', 'Category D'],
-            datasets: [{
-                data: [30, 25, 25, 20],
-                backgroundColor: [
-                    'rgba(255, 255, 255, 0.8)',
-                    'rgba(224, 224, 224, 0.8)',
-                    'rgba(255, 255, 255, 0.6)',
-                    'rgba(224, 224, 224, 0.6)'
-                ],
-                borderColor: '#2a2a2a',
-                borderWidth: 2
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: true,
-            plugins: {
-                legend: {
-                    display: true,
-                    position: 'right',
-                    labels: {
-                        color: '#e0e0e0',
-                        font: {
-                            size: 12
-                        },
-                        padding: 15
+        if (!Array.isArray(repos)) {
+            throw new Error('Invalid response from GitHub API');
+        }
+
+        portfolioContainer.innerHTML = '';
+
+        repos.forEach(repo => {
+            if (repo.fork) return; // Skip forked repositories
+
+            const repoCard = document.createElement('div');
+            repoCard.className = 'portfolio-item';
+
+            const languages = repo.language || 'N/A';
+            const stars = repo.stargazers_count || 0;
+            const description = repo.description || 'No description available.';
+
+            repoCard.innerHTML = `
+                <h3><a href="${repo.html_url}" target="_blank">${repo.name}</a></h3>
+                <p class="portfolio-description">${description}</p>
+                <div class="portfolio-meta">
+                    <span class="portfolio-language">${languages}</span>
+                    <span class="portfolio-stars">⭐ ${stars}</span>
+                </div>
+                <a href="${repo.html_url}" target="_blank" class="portfolio-link">View on GitHub →</a>
+            `;
+
+            portfolioContainer.appendChild(repoCard);
+        });
+
+        if (repos.length === 0) {
+            portfolioContainer.innerHTML = '<p>No repositories found.</p>';
+        }
+    } catch (error) {
+        console.error('Error loading GitHub repositories:', error);
+        portfolioContainer.innerHTML = '<p>Unable to load projects. Please check your connection or try again later.</p>';
+    }
+}
+
+// Lazy Loading for images
+function initializeLazyLoading() {
+    if ('IntersectionObserver' in window) {
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    if (img.dataset.src) {
+                        img.src = img.dataset.src;
+                        img.removeAttribute('data-src');
+                        observer.unobserve(img);
                     }
                 }
-            }
-        }
-    });
+            });
+        });
+
+        // Observe all images with data-src attribute
+        document.querySelectorAll('img[data-src]').forEach(img => {
+            imageObserver.observe(img);
+        });
+    } else {
+        // Fallback for browsers without IntersectionObserver
+        document.querySelectorAll('img[data-src]').forEach(img => {
+            img.src = img.dataset.src;
+            img.removeAttribute('data-src');
+        });
+    }
 }
 
 // Chat functionality
@@ -168,6 +89,8 @@ function initializeChat() {
     const sendBtn = document.getElementById('sendChatBtn');
     const messageInput = document.getElementById('chatMessage');
     const usernameInput = document.getElementById('chatUsername');
+
+    if (!sendBtn || !messageInput || !usernameInput) return;
 
     // Load existing messages
     loadChatMessages();
@@ -198,6 +121,7 @@ function loadChatMessages() {
         .then(data => {
             if (data.messages && data.messages.length > 0) {
                 const messagesContainer = document.getElementById('chatMessages');
+                if (!messagesContainer) return;
                 
                 // Only update if there are new messages
                 if (data.messages.length !== lastMessageCount) {
@@ -240,6 +164,8 @@ function sendMessage() {
     const usernameInput = document.getElementById('chatUsername');
     const messageInput = document.getElementById('chatMessage');
     
+    if (!usernameInput || !messageInput) return;
+    
     const username = usernameInput.value.trim();
     const message = messageInput.value.trim();
     
@@ -250,6 +176,8 @@ function sendMessage() {
     
     // Disable button during send
     const sendBtn = document.getElementById('sendChatBtn');
+    if (!sendBtn) return;
+    
     sendBtn.disabled = true;
     sendBtn.textContent = 'Sending...';
     
@@ -301,4 +229,3 @@ function formatTimestamp(timestamp) {
         return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
     }
 }
-
