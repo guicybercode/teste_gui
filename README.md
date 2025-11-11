@@ -1,34 +1,65 @@
-# Simple Web Dashboard with Charts and Chat
+# Cyber Mathrock - Personal Website
 
-A lightweight PHP web application featuring interactive charts, content sections, images, and a simple chat system without login requirements. Designed for easy server testing with minimal dependencies.
+> Source code repository for my personal blog and portfolio website
 
-## Features
+A modern, lightweight personal website built with PHP, HTML, CSS, and JavaScript. Features a Wikipedia-inspired layout with a clean aesthetic, showcasing my work as a software engineer and musician.
 
-- **Interactive Charts**: Three types of charts powered by Chart.js
-  - Line chart for time series data
-  - Bar chart for comparative data
-  - Pie chart for distribution data
+## 🌟 Features
 
+- **Personal Blog**: Wikipedia-inspired layout with sidebar navigation and article-style content
+- **GitHub Portfolio**: Automatically displays pinned repositories from GitHub
+- **Skills Visualization**: Interactive radar chart showcasing diverse skills (Programming, Music, Languages, Systems, Cloud, Reading, Composition, Linux)
 - **Real-time Chat**: Simple chat system without login requirements
-  - File-based message storage (no database needed)
+  - Messages automatically expire after 24 hours
+  - File-based storage (no database needed)
   - Auto-refresh every 3 seconds
-  - Message history up to 100 messages
+- **Responsive Design**: Beautiful light aesthetic theme that works perfectly on desktop and mobile
+- **Orange Color Scheme**: Warm, modern color palette with orange accents
+- **Photo Placeholders**: Ready-to-use spaces for personal photos
 
-- **Responsive Design**: Modern, clean interface that works on all devices
+## 📸 Screenshots
 
-- **Image Gallery**: Display section for images with placeholder support
+### Home Page
+![Home Page](images/screenshots/home.png)
 
-- **Statistics Cards**: Visual representation of key metrics
+### Portfolio Section
+![Portfolio](images/screenshots/portfolio.png)
 
-- **Content Sections**: Informational content areas
+### Skills Visualization
+![Skills](images/screenshots/skills.png)
 
-## Requirements
+### Chat Interface
+![Chat](images/screenshots/chat.png)
+
+*Note: Add your screenshots to the `images/screenshots/` directory*
+
+## 🎵 Music & Videos
+
+Check out my guitar covers on YouTube: [@moonguip](https://youtube.com/@moonguip)
+
+### Featured Cover: aespa
+[![aespa Cover](https://img.youtube.com/vi/VIDEO_ID/maxresdefault.jpg)](https://youtube.com/watch?v=VIDEO_ID)
+
+*Replace `VIDEO_ID` with your actual YouTube video ID*
+
+## 🚀 Future Features
+
+- [ ] Add more interactive elements
+- [ ] Implement blog post system
+- [ ] Add contact form
+- [ ] Integrate music player
+- [ ] Add dark mode toggle
+- [ ] Implement search functionality
+
+*Add your planned features here*
+
+## 📋 Requirements
 
 - PHP 7.4 or higher
 - Apache or Nginx web server
 - Write permissions for the `chat_messages.txt` file
 
-## Installation
+## 🛠️ Installation
 
 ### Quick Install (Debian/Ubuntu/Arch)
 
@@ -41,7 +72,7 @@ sudo ./install.sh
 
 The script will:
 - Detect your Linux distribution
-- Install PHP and Apache
+- Install PHP and Apache/Nginx
 - Configure necessary modules
 - Provide setup instructions
 
@@ -65,49 +96,33 @@ sudo systemctl start httpd
 sudo systemctl enable httpd
 ```
 
-## Setup
-
-1. Copy the project files to your web server directory:
-   - **Debian/Ubuntu**: `/var/www/html/` or your virtual host directory
-   - **Arch Linux**: `/srv/http/` or your virtual host directory
-
-2. Set proper permissions:
-   ```bash
-   sudo chown -R www-data:www-data /path/to/project  # Debian/Ubuntu
-   sudo chown -R http:http /path/to/project           # Arch Linux
-   ```
-
-3. Make the chat file writable:
-   ```bash
-   sudo chmod 666 /path/to/project/chat_messages.txt
-   ```
-
-4. Access the application:
-   - Open `http://localhost` in your browser
-   - Or `http://your-server-ip` if accessing remotely
-
-## Project Structure
+## 📁 Project Structure
 
 ```
 projeto_droplet/
-├── index.php              # Main dashboard page
+├── index.php              # Main website page
 ├── chat.php               # Chat API endpoints
 ├── chat_messages.txt      # Chat message storage (created automatically)
 ├── css/
-│   └── style.css          # Stylesheet
+│   └── style.css          # Stylesheet with orange theme
 ├── js/
-│   └── main.js            # JavaScript for charts and chat
+│   └── main.js            # JavaScript for portfolio, charts, and chat
 ├── images/
 │   └── placeholder/       # Image directory
+│   └── screenshots/        # Screenshots directory (create if needed)
 ├── install.sh             # Installation script
 └── README.md              # This file
 ```
 
-## Usage
+## 🎯 Usage
 
-### Charts
+### Portfolio
 
-The charts are automatically initialized with sample data when the page loads. You can modify the data in `js/main.js` to use your own datasets.
+The portfolio section automatically fetches your pinned repositories from GitHub. If GraphQL API fails (requires authentication), it falls back to showing your 6 most recently updated repositories.
+
+### Skills Chart
+
+The skills radar chart displays 8 diverse skills. You can modify the data in `js/main.js` in the `initializeSkillsChart()` function.
 
 ### Chat
 
@@ -115,44 +130,64 @@ The charts are automatically initialized with sample data when the page loads. Y
 2. Type your message
 3. Click "Send" or press Enter
 4. Messages are automatically refreshed every 3 seconds
-5. All users can see messages without login
+5. Messages expire after 24 hours automatically
 
-### Images
+### Adding Screenshots
 
-Place your images in the `images/placeholder/` directory. The gallery will automatically display them. If images are missing, placeholder images will be shown.
+1. Create a `screenshots` directory inside `images/`
+2. Add your screenshot images
+3. Update the image paths in the Screenshots section above
 
-## Customization
+### Adding YouTube Videos
 
-### Changing Chart Data
+1. Get your YouTube video ID from the URL (e.g., `dQw4w9WgXcQ` from `https://youtube.com/watch?v=dQw4w9WgXcQ`)
+2. Replace `VIDEO_ID` in the Music & Videos section with your actual video ID
 
-Edit `js/main.js` and modify the data arrays in the `initializeCharts()` function.
+## 🎨 Customization
 
-### Styling
+### Changing Colors
 
-Modify `css/style.css` to change colors, fonts, and layout.
+Modify `css/style.css` and update the CSS variables in `:root`:
+- `--link-color`: Primary orange color (#ff6b35)
+- `--link-hover`: Hover orange color (#ff8c5a)
+- `--accent-orange`: Soft orange accent (#ffb88c)
+
+### Updating Skills Chart
+
+Edit `js/main.js` and modify the `initializeSkillsChart()` function to change:
+- Skill labels
+- Skill values (0-100)
+- Chart colors
 
 ### Chat Settings
 
 Edit `chat.php` to modify:
-- Maximum messages stored (`$maxMessages`)
+- Message expiration time (currently 24 hours)
+- Maximum messages stored
 - Message refresh interval (change `3000` in `main.js`)
 
-## Security Notes
+## 🔒 Security Notes
 
-- This is a simple test application. For production use, consider:
+- This is a personal website. For production use, consider:
   - Adding rate limiting for chat messages
   - Implementing user authentication
   - Using a proper database instead of file storage
   - Adding CSRF protection
-  - Implementing input validation and sanitization improvements
+  - Implementing enhanced input validation and sanitization
 
-## Troubleshooting
+## 🐛 Troubleshooting
 
 ### Chat not working
 
 - Check file permissions: `chat_messages.txt` must be writable
 - Check PHP error logs: `/var/log/apache2/error.log` (Debian/Ubuntu) or `/var/log/httpd/error_log` (Arch)
 - Ensure PHP is properly configured
+
+### Portfolio not loading
+
+- Check browser console for JavaScript errors
+- Verify GitHub API is accessible (check CORS if needed)
+- GraphQL API may require authentication - fallback to REST API should work automatically
 
 ### Charts not displaying
 
@@ -166,14 +201,10 @@ Edit `chat.php` to modify:
 - Verify image paths are correct
 - Check browser console for 404 errors
 
-## License
+## 📝 License
 
-This project is provided as-is for testing purposes.
+This project is provided as-is for personal use.
 
 ---
 
 "너희는 먼저 그의 나라와 그의 의를 구하라 그리하면 이 모든 것을 너희에게 더하시리라" - 마태복음 6:33
-
-# teste_gui
-# teste_gui
-# teste_gui
