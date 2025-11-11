@@ -200,7 +200,7 @@
 
     <!-- Footer -->
     <footer class="page-footer">
-        <p>&copy; 2024 Cyber Mathrock. Software Engineer & Musician.</p>
+        <p>&copy; 2024 Cyber Mathrock. Software Engineer & Musician. Todos os direitos reservados.</p>
     </footer>
 
     <script src="js/main.js"></script>
