@@ -583,3 +583,9 @@ body {
 .github-graph:hover {
     filter: brightness(1);
 }
+
+/* Focus states for accessibility */
+*:focus-visible {
+    outline: 2px solid var(--link-color);
+    outline-offset: 2px;
+}
