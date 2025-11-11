@@ -142,6 +142,21 @@
                     <h3>Guitar</h3>
                     <p>I play both 6-string and 7-string guitars, exploring various musical styles and techniques. The extended range allows for deeper tonalities and complex harmonic structures.</p>
                     
+                    <!-- YouTube Video Embed -->
+                    <h3>Featured Cover: aespa</h3>
+                    <div class="video-container">
+                        <iframe 
+                            width="560" 
+                            height="315" 
+                            src="https://www.youtube.com/embed/VIDEO_ID" 
+                            title="aespa Cover" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                    <p><a href="https://youtube.com/@moonguip" target="_blank">Check out more covers on my YouTube channel →</a></p>
+                    
                     <!-- Photo placeholder for guitar/music -->
                     <div class="photo-placeholder"></div>
                 </section>
