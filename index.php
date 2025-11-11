@@ -151,14 +151,14 @@
                         <iframe 
                             width="560" 
                             height="315" 
-                            src="https://www.youtube.com/embed/fvkk-S3XDEc" 
+                            src="https://www.youtube.com/embed/fvkk-S3XDEc?rel=0" 
                             title="aespa Cover" 
                             frameborder="0" 
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
                             allowfullscreen>
                         </iframe>
                     </div>
-                    <p><a href="https://youtube.com/@moonguip" target="_blank">Check out more covers on my YouTube channel →</a></p>
+                    <p><a href="https://youtube.com/shorts/fvkk-S3XDEc" target="_blank">Watch on YouTube →</a> | <a href="https://youtube.com/@moonguip" target="_blank">Check out more covers on my YouTube channel →</a></p>
                 </section>
 
                 <!-- Languages & Culture Section -->
