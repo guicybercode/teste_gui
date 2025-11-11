@@ -59,7 +59,7 @@
                     <span class="logo-cyber">CYBER</span>
                     <span class="logo-mathrock">MATHROCK</span>
                 </div>
-                <p class="subtitle">Software Engineer & Musician</p>
+                <p class="subtitle">Software Engineer & Music</p>
             </header>
 
             <!-- Personal Infobox (Wikipedia-style right sidebar) -->
