@@ -18,115 +18,110 @@ async function initializePortfolio() {
 
     try {
         // Try GraphQL API first for pinned repositories
-        const query = `
-            {
-                user(login: "guicybercode") {
-                    pinnedItems(first: 6, types: REPOSITORY) {
-                        nodes {
-                            ... on Repository {
-                                name
-                                description
-                                url
-                                languages(first: 1) {
-                                    nodes {
-                                        name
+        let repos = null;
+        let useGraphQL = false;
+        
+        try {
+            const query = `
+                {
+                    user(login: "guicybercode") {
+                        pinnedItems(first: 6, types: REPOSITORY) {
+                            nodes {
+                                ... on Repository {
+                                    name
+                                    description
+                                    url
+                                    languages(first: 1) {
+                                        nodes {
+                                            name
+                                        }
                                     }
+                                    stargazerCount
                                 }
-                                stargazerCount
                             }
                         }
                     }
                 }
-            }
-        `;
+            `;
 
-        const graphqlResponse = await fetch('https://api.github.com/graphql', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ query })
-        });
-
-        if (!graphqlResponse.ok) {
-            throw new Error(`GraphQL API error: ${graphqlResponse.status}`);
-        }
-
-        const graphqlData = await graphqlResponse.json();
-
-        // If GraphQL works, use it
-        if (!graphqlData.errors && graphqlData.data?.user?.pinnedItems?.nodes) {
-            const repos = graphqlData.data.user.pinnedItems.nodes;
-            
-            portfolioContainer.innerHTML = '';
-
-            if (repos.length === 0) {
-                portfolioContainer.innerHTML = '<p class="portfolio-empty">No pinned repositories found.</p>';
-                return;
-            }
-
-            repos.forEach(repo => {
-                const repoCard = document.createElement('div');
-                repoCard.className = 'portfolio-item fade-in';
-
-                const language = repo.languages?.nodes?.[0]?.name || 'N/A';
-                const stars = repo.stargazerCount || 0;
-                const description = repo.description || 'No description available.';
-
-                repoCard.innerHTML = `
-                    <h3><a href="${repo.url}" target="_blank" rel="noopener noreferrer">${repo.name}</a></h3>
-                    <p class="portfolio-description">${description}</p>
-                    <div class="portfolio-meta">
-                        <span class="portfolio-language">${language}</span>
-                        <span class="portfolio-stars">⭐ ${stars}</span>
-                    </div>
-                    <a href="${repo.url}" target="_blank" rel="noopener noreferrer" class="portfolio-link">View on GitHub →</a>
-                `;
-
-                portfolioContainer.appendChild(repoCard);
+            const graphqlResponse = await fetch('https://api.github.com/graphql', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ query })
             });
-            return;
+
+            if (graphqlResponse.ok) {
+                const graphqlData = await graphqlResponse.json();
+                
+                // If GraphQL works and has data, use it
+                if (!graphqlData.errors && graphqlData.data?.user?.pinnedItems?.nodes) {
+                    repos = graphqlData.data.user.pinnedItems.nodes;
+                    useGraphQL = true;
+                }
+            }
+        } catch (graphqlError) {
+            console.log('GraphQL API failed, will use REST API fallback:', graphqlError);
         }
 
-        // Fallback to REST API if GraphQL fails
-        console.log('GraphQL failed, using REST API fallback');
-        const response = await fetch('https://api.github.com/users/guicybercode/repos?sort=updated&per_page=6');
-        
-        if (!response.ok) {
-            throw new Error(`REST API error: ${response.status}`);
-        }
-        
-        const repos = await response.json();
+        // Fallback to REST API if GraphQL failed or returned no data
+        if (!useGraphQL || !repos || repos.length === 0) {
+            console.log('Using REST API fallback');
+            const response = await fetch('https://api.github.com/users/guicybercode/repos?sort=updated&per_page=6');
+            
+            if (!response.ok) {
+                throw new Error(`REST API error: ${response.status}`);
+            }
+            
+            const restRepos = await response.json();
 
-        if (!Array.isArray(repos)) {
-            throw new Error('Invalid response from GitHub API');
+            if (!Array.isArray(restRepos)) {
+                throw new Error('Invalid response from GitHub API');
+            }
+
+            // Filter out forks
+            repos = restRepos.filter(repo => !repo.fork).slice(0, 6);
+            useGraphQL = false;
         }
 
+        // Clear loading state
         portfolioContainer.innerHTML = '';
 
-        if (repos.length === 0) {
+        if (!repos || repos.length === 0) {
             portfolioContainer.innerHTML = '<p class="portfolio-empty">No repositories found.</p>';
             return;
         }
 
+        // Render repositories
         repos.forEach(repo => {
-            if (repo.fork) return; // Skip forked repositories
-
             const repoCard = document.createElement('div');
             repoCard.className = 'portfolio-item fade-in';
 
-            const languages = repo.language || 'N/A';
-            const stars = repo.stargazers_count || 0;
-            const description = repo.description || 'No description available.';
+            let name, url, description, language, stars;
+
+            if (useGraphQL) {
+                name = repo.name;
+                url = repo.url;
+                description = repo.description || 'No description available.';
+                language = repo.languages?.nodes?.[0]?.name || 'N/A';
+                stars = repo.stargazerCount || 0;
+            } else {
+                name = repo.name;
+                url = repo.html_url;
+                description = repo.description || 'No description available.';
+                language = repo.language || 'N/A';
+                stars = repo.stargazers_count || 0;
+            }
 
             repoCard.innerHTML = `
-                <h3><a href="${repo.html_url}" target="_blank" rel="noopener noreferrer">${repo.name}</a></h3>
+                <h3><a href="${url}" target="_blank" rel="noopener noreferrer">${name}</a></h3>
                 <p class="portfolio-description">${description}</p>
                 <div class="portfolio-meta">
-                    <span class="portfolio-language">${languages}</span>
+                    <span class="portfolio-language">${language}</span>
                     <span class="portfolio-stars">⭐ ${stars}</span>
                 </div>
-                <a href="${repo.html_url}" target="_blank" rel="noopener noreferrer" class="portfolio-link">View on GitHub →</a>
+                <a href="${url}" target="_blank" rel="noopener noreferrer" class="portfolio-link">View on GitHub →</a>
             `;
 
             portfolioContainer.appendChild(repoCard);
