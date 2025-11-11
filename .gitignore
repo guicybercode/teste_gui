@@ -1,5 +1,6 @@
 # Chat messages file (runtime data)
 chat_messages.txt
+chat_rate_limit.txt
 
 # OS files
 .DS_Store

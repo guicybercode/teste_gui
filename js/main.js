@@ -5,12 +5,16 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeLazyLoading();
     initializeSkillsChart();
     initializeScrollAnimations();
+    initializeScrollToTop();
 });
 
 // GitHub Portfolio
 async function initializePortfolio() {
     const portfolioContainer = document.getElementById('portfolio-container');
     if (!portfolioContainer) return;
+
+    // Show loading state
+    portfolioContainer.innerHTML = '<div class="portfolio-loading"><div class="loading-spinner"></div> Loading projects...</div>';
 
     try {
         // Try GraphQL API first for pinned repositories
@@ -44,6 +48,10 @@ async function initializePortfolio() {
             body: JSON.stringify({ query })
         });
 
+        if (!graphqlResponse.ok) {
+            throw new Error(`GraphQL API error: ${graphqlResponse.status}`);
+        }
+
         const graphqlData = await graphqlResponse.json();
 
         // If GraphQL works, use it
@@ -53,26 +61,26 @@ async function initializePortfolio() {
             portfolioContainer.innerHTML = '';
 
             if (repos.length === 0) {
-                portfolioContainer.innerHTML = '<p>No pinned repositories found.</p>';
+                portfolioContainer.innerHTML = '<p class="portfolio-empty">No pinned repositories found.</p>';
                 return;
             }
 
             repos.forEach(repo => {
                 const repoCard = document.createElement('div');
-                repoCard.className = 'portfolio-item';
+                repoCard.className = 'portfolio-item fade-in';
 
                 const language = repo.languages?.nodes?.[0]?.name || 'N/A';
                 const stars = repo.stargazerCount || 0;
                 const description = repo.description || 'No description available.';
 
                 repoCard.innerHTML = `
-                    <h3><a href="${repo.url}" target="_blank">${repo.name}</a></h3>
+                    <h3><a href="${repo.url}" target="_blank" rel="noopener noreferrer">${repo.name}</a></h3>
                     <p class="portfolio-description">${description}</p>
                     <div class="portfolio-meta">
                         <span class="portfolio-language">${language}</span>
                         <span class="portfolio-stars">⭐ ${stars}</span>
                     </div>
-                    <a href="${repo.url}" target="_blank" class="portfolio-link">View on GitHub →</a>
+                    <a href="${repo.url}" target="_blank" rel="noopener noreferrer" class="portfolio-link">View on GitHub →</a>
                 `;
 
                 portfolioContainer.appendChild(repoCard);
@@ -83,6 +91,11 @@ async function initializePortfolio() {
         // Fallback to REST API if GraphQL fails
         console.log('GraphQL failed, using REST API fallback');
         const response = await fetch('https://api.github.com/users/guicybercode/repos?sort=updated&per_page=6');
+        
+        if (!response.ok) {
+            throw new Error(`REST API error: ${response.status}`);
+        }
+        
         const repos = await response.json();
 
         if (!Array.isArray(repos)) {
@@ -92,7 +105,7 @@ async function initializePortfolio() {
         portfolioContainer.innerHTML = '';
 
         if (repos.length === 0) {
-            portfolioContainer.innerHTML = '<p>No repositories found.</p>';
+            portfolioContainer.innerHTML = '<p class="portfolio-empty">No repositories found.</p>';
             return;
         }
 
@@ -100,27 +113,32 @@ async function initializePortfolio() {
             if (repo.fork) return; // Skip forked repositories
 
             const repoCard = document.createElement('div');
-            repoCard.className = 'portfolio-item';
+            repoCard.className = 'portfolio-item fade-in';
 
             const languages = repo.language || 'N/A';
             const stars = repo.stargazers_count || 0;
             const description = repo.description || 'No description available.';
 
             repoCard.innerHTML = `
-                <h3><a href="${repo.html_url}" target="_blank">${repo.name}</a></h3>
+                <h3><a href="${repo.html_url}" target="_blank" rel="noopener noreferrer">${repo.name}</a></h3>
                 <p class="portfolio-description">${description}</p>
                 <div class="portfolio-meta">
                     <span class="portfolio-language">${languages}</span>
                     <span class="portfolio-stars">⭐ ${stars}</span>
                 </div>
-                <a href="${repo.html_url}" target="_blank" class="portfolio-link">View on GitHub →</a>
+                <a href="${repo.html_url}" target="_blank" rel="noopener noreferrer" class="portfolio-link">View on GitHub →</a>
             `;
 
             portfolioContainer.appendChild(repoCard);
         });
     } catch (error) {
         console.error('Error loading GitHub repositories:', error);
-        portfolioContainer.innerHTML = '<p>Unable to load projects. Please check your connection or try again later.</p>';
+        portfolioContainer.innerHTML = `
+            <div class="portfolio-error">
+                <p>Unable to load projects. Please check your connection or try again later.</p>
+                <p class="error-details">Error: ${error.message}</p>
+            </div>
+        `;
     }
 }
 
@@ -299,7 +317,12 @@ function initializeChat() {
 
 function loadChatMessages() {
     fetch('chat.php')
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
         .then(data => {
             if (data.messages && data.messages.length > 0) {
                 const messagesContainer = document.getElementById('chatMessages');
@@ -339,6 +362,7 @@ function loadChatMessages() {
         })
         .catch(error => {
             console.error('Error loading chat messages:', error);
+            // Don't show error to user on every poll, only log it
         });
 }
 
@@ -373,25 +397,58 @@ function sendMessage() {
             message: message
         })
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(err => {
+                throw new Error(err.error || `HTTP error! status: ${response.status}`);
+            });
+        }
+        return response.json();
+    })
     .then(data => {
         if (data.success) {
             messageInput.value = '';
             // Reload messages immediately
             loadChatMessages();
+            // Show success feedback (visual, not alert)
+            showChatFeedback('Message sent!', 'success');
         } else {
-            alert('Error sending message: ' + (data.error || 'Unknown error'));
+            throw new Error(data.error || 'Unknown error');
         }
     })
     .catch(error => {
         console.error('Error sending message:', error);
-        alert('Error sending message. Please try again.');
+        showChatFeedback(error.message || 'Error sending message. Please try again.', 'error');
     })
     .finally(() => {
         sendBtn.disabled = false;
         sendBtn.textContent = 'Send';
         messageInput.focus();
     });
+}
+
+function showChatFeedback(message, type) {
+    const chatContainer = document.querySelector('.chat-container');
+    if (!chatContainer) return;
+    
+    // Remove existing feedback
+    const existingFeedback = chatContainer.querySelector('.chat-feedback');
+    if (existingFeedback) {
+        existingFeedback.remove();
+    }
+    
+    const feedback = document.createElement('div');
+    feedback.className = `chat-feedback chat-feedback-${type}`;
+    feedback.textContent = message;
+    feedback.setAttribute('role', 'alert');
+    feedback.setAttribute('aria-live', 'polite');
+    
+    chatContainer.insertBefore(feedback, chatContainer.firstChild);
+    
+    // Auto-remove after 3 seconds
+    setTimeout(() => {
+        feedback.remove();
+    }, 3000);
 }
 
 function formatTimestamp(timestamp) {
@@ -410,4 +467,33 @@ function formatTimestamp(timestamp) {
     } else {
         return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
     }
+}
+
+// Scroll to top button
+function initializeScrollToTop() {
+    // Create button
+    const scrollButton = document.createElement('button');
+    scrollButton.id = 'scrollToTop';
+    scrollButton.className = 'scroll-to-top';
+    scrollButton.setAttribute('aria-label', 'Scroll to top');
+    scrollButton.innerHTML = '↑';
+    scrollButton.style.display = 'none';
+    document.body.appendChild(scrollButton);
+    
+    // Show/hide button based on scroll position
+    window.addEventListener('scroll', function() {
+        if (window.pageYOffset > 300) {
+            scrollButton.style.display = 'block';
+        } else {
+            scrollButton.style.display = 'none';
+        }
+    });
+    
+    // Scroll to top on click
+    scrollButton.addEventListener('click', function() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
 }

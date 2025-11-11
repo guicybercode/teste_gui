@@ -3,34 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cyber Mathrock - Software Engineer & Musician</title>
+    <title>Cyber Mathrock - Software Engineer & Music</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Personal website of Cyber Mathrock - Software Engineer & Musician. Portfolio, skills, music covers, and blog.">
+    <meta name="keywords" content="software engineer, musician, guitar, programming, portfolio, cyber mathrock">
+    <meta name="author" content="Cyber Mathrock">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://cybermathrock.com/">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://cybermathrock.com/">
+    <meta property="og:title" content="Cyber Mathrock - Software Engineer & Music">
+    <meta property="og:description" content="Personal website of Cyber Mathrock - Software Engineer & Musician. Portfolio, skills, music covers, and blog.">
+    <meta property="og:image" content="https://cybermathrock.com/images/og-image.jpg">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://cybermathrock.com/">
+    <meta name="twitter:title" content="Cyber Mathrock - Software Engineer & Music">
+    <meta name="twitter:description" content="Personal website of Cyber Mathrock - Software Engineer & Musician. Portfolio, skills, music covers, and blog.">
+    <meta name="twitter:image" content="https://cybermathrock.com/images/og-image.jpg">
+    
+    <!-- Resource Hints -->
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://api.github.com">
+    <link rel="dns-prefetch" href="https://www.youtube.com">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="preconnect" href="https://api.github.com" crossorigin>
+    
+    <!-- Stylesheet -->
     <link rel="stylesheet" href="css/style.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Cyber Mathrock",
+        "jobTitle": "Software Engineer & Musician",
+        "url": "https://cybermathrock.com",
+        "sameAs": [
+            "https://github.com/guicybercode",
+            "https://www.linkedin.com/in/guilherme-monteiro-3653b51a7/",
+            "https://youtube.com/@moonguip"
+        ],
+        "knowsLanguage": ["Portuguese", "English", "Korean", "Thai", "Icelandic"],
+        "address": {
+            "@type": "PostalAddress",
+            "addressCountry": "BR"
+        }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Cyber Mathrock",
+        "url": "https://cybermathrock.com",
+        "author": {
+            "@type": "Person",
+            "name": "Cyber Mathrock"
+        }
+    }
+    </script>
+    
+    <!-- Chart.js with defer -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
 </head>
 <body>
+    <!-- Skip to main content link -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
     <!-- Top Navigation Bar -->
-    <nav class="top-nav">
+    <nav class="top-nav" role="navigation" aria-label="Main navigation">
         <div class="nav-container">
             <div class="nav-logo">
-                <div class="logo-container">
+                <div class="logo-container" aria-label="Cyber Mathrock logo">
                     <span class="logo-cyber">CYBER</span>
                     <span class="logo-mathrock">MATHROCK</span>
                 </div>
             </div>
             <ul class="nav-links">
-                <li><a href="#about">About</a></li>
-                <li><a href="#professional">Professional</a></li>
-                <li><a href="#portfolio">Portfolio</a></li>
-                <li><a href="#music">Music</a></li>
-                <li><a href="#languages">Languages</a></li>
-                <li><a href="#chat">Chat</a></li>
+                <li><a href="#about" aria-label="Navigate to About section">About</a></li>
+                <li><a href="#professional" aria-label="Navigate to Professional section">Professional</a></li>
+                <li><a href="#portfolio" aria-label="Navigate to Portfolio section">Portfolio</a></li>
+                <li><a href="#music" aria-label="Navigate to Music section">Music</a></li>
+                <li><a href="#languages" aria-label="Navigate to Languages section">Languages</a></li>
+                <li><a href="#chat" aria-label="Navigate to Chat section">Chat</a></li>
             </ul>
         </div>
     </nav>
 
     <div class="page-container">
         <!-- Left Sidebar -->
-        <aside class="sidebar">
+        <aside class="sidebar" role="complementary" aria-label="Site navigation">
             <div class="sidebar-content">
                 <h3>Navigation</h3>
                 <ul class="sidebar-menu">
@@ -52,7 +120,7 @@
         </aside>
 
         <!-- Main Content Area -->
-        <main class="main-content">
+        <main class="main-content" id="main-content" role="main">
             <!-- Article Header -->
             <header class="article-header">
                 <div class="logo-container main-logo">
@@ -63,7 +131,7 @@
             </header>
 
             <!-- Personal Infobox (Wikipedia-style right sidebar) -->
-            <aside class="infobox">
+            <aside class="infobox" role="complementary" aria-label="Personal information">
                 <h2>Cyber Mathrock</h2>
                 <div class="infobox-content">
                     <div class="infobox-item">
@@ -84,11 +152,11 @@
                     </div>
                     <div class="infobox-item">
                         <span class="infobox-label">GitHub</span>
-                        <span class="infobox-value"><a href="https://github.com/guicybercode" target="_blank">guicybercode</a></span>
+                        <span class="infobox-value"><a href="https://github.com/guicybercode" target="_blank" rel="noopener noreferrer">guicybercode</a></span>
                     </div>
                     <div class="infobox-item">
                         <span class="infobox-label">LinkedIn</span>
-                        <span class="infobox-value"><a href="https://www.linkedin.com/in/guilherme-monteiro-3653b51a7/" target="_blank">Profile</a></span>
+                        <span class="infobox-value"><a href="https://www.linkedin.com/in/guilherme-monteiro-3653b51a7/" target="_blank" rel="noopener noreferrer">Profile</a></span>
                     </div>
                 </div>
             </aside>
@@ -102,7 +170,7 @@
                     <p>Fluent in Portuguese and English, conversational in Korean, Thai, and Icelandic. As a composer and performer, I blend technical precision with creative intuition.</p>
                     
                     <!-- Photo placeholder -->
-                    <div class="photo-placeholder"></div>
+                    <div class="photo-placeholder" role="img" aria-label="Photo placeholder for personal image"></div>
                 </section>
 
                 <!-- Professional Background Section -->
@@ -143,7 +211,7 @@
                     <p>I play both 6-string and 7-string guitars, exploring various musical styles and techniques. The extended range allows for deeper tonalities and complex harmonic structures.</p>
                     
                     <!-- Photo placeholder for guitar/music -->
-                    <div class="photo-placeholder"></div>
+                    <div class="photo-placeholder" role="img" aria-label="Photo placeholder for guitar and music"></div>
                     
                     <!-- YouTube Video Embed -->
                     <h3>Featured Cover: aespa</h3>
@@ -154,11 +222,12 @@
                             src="https://www.youtube.com/embed/fvkk-S3XDEc?rel=0" 
                             title="aespa Cover" 
                             frameborder="0" 
+                            loading="lazy"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
                             allowfullscreen>
                         </iframe>
                     </div>
-                    <p><a href="https://youtube.com/shorts/fvkk-S3XDEc" target="_blank">Watch on YouTube →</a> | <a href="https://youtube.com/@moonguip" target="_blank">Check out more covers on my YouTube channel →</a></p>
+                    <p><a href="https://youtube.com/shorts/fvkk-S3XDEc" target="_blank" rel="noopener noreferrer">Watch on YouTube →</a> | <a href="https://youtube.com/@moonguip" target="_blank" rel="noopener noreferrer">Check out more covers on my YouTube channel →</a></p>
                 </section>
 
                 <!-- Languages & Culture Section -->
@@ -167,7 +236,7 @@
                     <p>Language learning is one of my passions. Fluent in Portuguese and English, conversational in Korean, Thai, and Icelandic. This multilingual ability helps me connect with global cultures and approach problems from multiple perspectives.</p>
                     
                     <!-- Photo placeholder -->
-                    <div class="photo-placeholder"></div>
+                    <div class="photo-placeholder" role="img" aria-label="Photo placeholder for personal image"></div>
                 </section>
 
                 <!-- Reading & Learning Section -->
@@ -186,8 +255,8 @@
                 <section id="contact">
                     <h2>Connect</h2>
                     <ul>
-                        <li><strong>GitHub:</strong> <a href="https://github.com/guicybercode" target="_blank">github.com/guicybercode</a></li>
-                        <li><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/guilherme-monteiro-3653b51a7/" target="_blank">linkedin.com/in/guilherme-monteiro-3653b51a7</a></li>
+                        <li><strong>GitHub:</strong> <a href="https://github.com/guicybercode" target="_blank" rel="noopener noreferrer">github.com/guicybercode</a></li>
+                        <li><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/guilherme-monteiro-3653b51a7/" target="_blank" rel="noopener noreferrer">linkedin.com/in/guilherme-monteiro-3653b51a7</a></li>
                     </ul>
                 </section>
 
@@ -195,7 +264,7 @@
                 <section id="chat">
                     <h2>Live Chat</h2>
                     <div class="chat-container">
-                        <div class="chat-messages" id="chatMessages">
+                        <div class="chat-messages" id="chatMessages" role="log" aria-live="polite" aria-label="Chat messages">
                             <div class="chat-message">
                                 <span class="chat-username">System:</span>
                                 <span class="chat-text">Welcome! Feel free to leave a message.</span>
@@ -203,9 +272,9 @@
                             </div>
                         </div>
                         <div class="chat-input-container">
-                            <input type="text" id="chatUsername" placeholder="Your name" maxlength="50">
-                            <input type="text" id="chatMessage" placeholder="Type your message..." maxlength="500">
-                            <button id="sendChatBtn">Send</button>
+                            <input type="text" id="chatUsername" placeholder="Your name" maxlength="50" aria-label="Your name">
+                            <input type="text" id="chatMessage" placeholder="Type your message..." maxlength="500" aria-label="Type your message">
+                            <button id="sendChatBtn" aria-label="Send message">Send</button>
                         </div>
                     </div>
                 </section>
