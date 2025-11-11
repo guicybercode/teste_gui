@@ -93,10 +93,10 @@ function initializeSkillsChart() {
     new Chart(ctx, {
         type: 'radar',
         data: {
-            labels: ['Rust', 'C/C++', 'Python', 'TypeScript', 'Java', 'Cloud', 'Linux', 'Systems'],
+            labels: ['Programming', 'Music', 'Languages', 'Systems', 'Cloud', 'Reading', 'Composition', 'Linux'],
             datasets: [{
                 label: 'Skill Level',
-                data: [85, 80, 75, 80, 70, 75, 85, 80],
+                data: [85, 80, 75, 80, 70, 85, 75, 85],
                 backgroundColor: 'rgba(107, 155, 209, 0.15)',
                 borderColor: 'rgba(107, 155, 209, 0.8)',
                 borderWidth: 2,

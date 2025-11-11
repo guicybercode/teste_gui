@@ -52,6 +52,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $messages = json_decode($content, true) ?: [];
     }
     
+    // Remove messages older than 24 hours
+    $currentTime = time();
+    $messages = array_filter($messages, function($msg) use ($currentTime) {
+        $messageTime = isset($msg['timestamp']) ? $msg['timestamp'] : 0;
+        $ageInHours = ($currentTime - $messageTime) / 3600;
+        return $ageInHours < 24;
+    });
+    $messages = array_values($messages); // Re-index array
+    
     // Add new message
     $newMessage = [
         'timestamp' => time(),
@@ -86,6 +95,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (file_exists($chatFile)) {
         $content = file_get_contents($chatFile);
         $messages = json_decode($content, true) ?: [];
+    }
+    
+    // Remove messages older than 24 hours
+    $currentTime = time();
+    $messages = array_filter($messages, function($msg) use ($currentTime) {
+        $messageTime = isset($msg['timestamp']) ? $msg['timestamp'] : 0;
+        $ageInHours = ($currentTime - $messageTime) / 3600;
+        return $ageInHours < 24;
+    });
+    $messages = array_values($messages); // Re-index array
+    
+    // Save cleaned messages back to file
+    if (file_exists($chatFile)) {
+        $fp = fopen($chatFile, 'c+');
+        if (flock($fp, LOCK_EX)) {
+            ftruncate($fp, 0);
+            fwrite($fp, json_encode($messages));
+            fflush($fp);
+            flock($fp, LOCK_UN);
+        }
+        fclose($fp);
     }
     
     // Return last 50 messages

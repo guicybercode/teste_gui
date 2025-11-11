@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Guilherme - Software Engineer & Musician</title>
+    <title>Cyber Mathrock - Software Engineer & Musician</title>
     <link rel="stylesheet" href="css/style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -12,7 +12,10 @@
     <nav class="top-nav">
         <div class="nav-container">
             <div class="nav-logo">
-                <h1>Guilherme</h1>
+                <div class="logo-container">
+                    <span class="logo-cyber">CYBER</span>
+                    <span class="logo-mathrock">MATHROCK</span>
+                </div>
             </div>
             <ul class="nav-links">
                 <li><a href="#about">About</a></li>
@@ -52,13 +55,16 @@
         <main class="main-content">
             <!-- Article Header -->
             <header class="article-header">
-                <h1>Guilherme</h1>
+                <div class="logo-container main-logo">
+                    <span class="logo-cyber">CYBER</span>
+                    <span class="logo-mathrock">MATHROCK</span>
+                </div>
                 <p class="subtitle">Software Engineer & Musician</p>
             </header>
 
             <!-- Personal Infobox (Wikipedia-style right sidebar) -->
             <aside class="infobox">
-                <h2>Guilherme</h2>
+                <h2>Cyber Mathrock</h2>
                 <div class="infobox-content">
                     <div class="infobox-item">
                         <span class="infobox-label">Location</span>
@@ -200,7 +206,7 @@
 
     <!-- Footer -->
     <footer class="page-footer">
-        <p>&copy; 2024 Guilherme. Software Engineer & Musician.</p>
+        <p>&copy; 2024 Cyber Mathrock. Software Engineer & Musician.</p>
     </footer>
 
     <script src="js/main.js"></script>
