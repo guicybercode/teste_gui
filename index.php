@@ -185,8 +185,15 @@
                 <!-- About Me Section -->
                 <section id="about">
                     <h2>About Me</h2>
-                    <p>Brazilian software engineer and musician pursuing Information Systems. I bridge low-level programming (C, Rust), Linux systems (Gentoo, NixOS), and scalable development with Java, Python, TypeScript, and C#. Experienced with AWS, Azure, and Oracle OCI.</p>
+                    <p>Brazilian Christian software engineer and musician pursuing Information Systems. I bridge low-level programming (C, Rust), Linux systems (Gentoo, NixOS), and scalable development with Java, Python, TypeScript, and C#. Experienced with AWS, Azure, and Oracle OCI.</p>
+                    
                     <p>Fluent in Portuguese and English, conversational in Korean, Thai, and Icelandic. As a composer and performer, I blend technical precision with creative intuition.</p>
+                    
+                    <p>I'm passionate about <strong>open source</strong> and actively contribute to various projects. I've worked as a translator for <strong>NixOS</strong>, <strong>Arch Linux</strong>, and other tech projects, helping make technology more accessible to speakers of different languages. Open source is not just about code for me—it's about building community, sharing knowledge, and making technology better for everyone.</p>
+                    
+                    <p>Beyond code and music, I'm an avid reader (averaging 30 books per month), a language enthusiast studying multiple languages including Taigi, and a church guitarist where I serve through music. My Christian faith is the foundation of everything I do, guiding my values, decisions, and how I approach both my technical work and creative pursuits.</p>
+                    
+                    <p>I love exploring the intersection of technology and creativity, whether that's through composing music, contributing to open-source projects, or learning new languages and cultures. Each of these passions informs the others, creating a unique perspective that I bring to everything I do.</p>
                     
                     <!-- Photo placeholder -->
                     <div class="photo-placeholder" role="img" aria-label="Photo placeholder for personal image"></div>
