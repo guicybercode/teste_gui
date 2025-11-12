@@ -14,7 +14,11 @@ header('Referrer-Policy: strict-origin-when-cross-origin');
 
 // Content Security Policy
 if (CSP_ENABLED) {
-    $csp = "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://api.github.com https://api.github.com/graphql; frame-src https://www.youtube.com;";
+    // Generate nonce for inline scripts
+    $nonce = base64_encode(random_bytes(16));
+    $_SESSION['csp_nonce'] = $nonce;
+    
+    $csp = "default-src 'self'; script-src 'self' 'nonce-{$nonce}' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self' https://api.github.com https://api.github.com/graphql; frame-src https://www.youtube.com;";
     if (CSP_REPORT_URI) {
         $csp .= " report-uri " . CSP_REPORT_URI . ";";
     }
@@ -111,7 +115,7 @@ function checkRateLimit($ip, $rateLimitFile, $maxMessages, $window) {
 // Initialize file if it doesn't exist
 if (!file_exists($chatFile)) {
     file_put_contents($chatFile, json_encode([]));
-    chmod($chatFile, 0666);
+    chmod($chatFile, 0644);
 }
 
 // Handle POST request - Send message
@@ -187,10 +191,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Enhanced sanitization
     $username = htmlspecialchars($username, ENT_QUOTES, 'UTF-8');
     $message = htmlspecialchars($message, ENT_QUOTES, 'UTF-8');
-    
-    // Remove potentially dangerous characters
-    $username = preg_replace('/[<>"\']/', '', $username);
-    $message = preg_replace('/[<>"\']/', '', $message);
     
     // Validate file paths to prevent path traversal
     $chatFile = realpath(CHAT_FILE) ?: CHAT_FILE;

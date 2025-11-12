@@ -1,3 +1,16 @@
+// Debug utility - only logs in development
+const DEBUG = typeof window !== 'undefined' && window.DEBUG_MODE === true;
+function debugLog(...args) {
+    if (DEBUG) {
+        debugLog(...args);
+    }
+}
+function debugError(...args) {
+    if (DEBUG) {
+        debugError(...args);
+    }
+}
+
 // Initialize when page loads
 document.addEventListener('DOMContentLoaded', function() {
     initializePortfolio();
@@ -16,10 +29,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // GitHub Portfolio
 async function initializePortfolio() {
-    console.log('Initializing portfolio...');
+    debugLog('Initializing portfolio...');
     const portfolioContainer = document.getElementById('portfolio-container');
     if (!portfolioContainer) {
-        console.log('Portfolio container not found');
+        debugLog('Portfolio container not found');
         return;
     }
 
@@ -54,7 +67,7 @@ async function initializePortfolio() {
         try {
             const cached = localStorage.getItem(CACHE_KEY);
             if (!cached) {
-                console.log('No cache found');
+                debugLog('No cache found');
                 return null;
             }
             
@@ -63,23 +76,23 @@ async function initializePortfolio() {
             
             // Validate cache structure
             if (!cacheData.timestamp || !cacheData.repos) {
-                console.log('Invalid cache structure, clearing cache');
+                debugLog('Invalid cache structure, clearing cache');
                 localStorage.removeItem(CACHE_KEY);
                 return null;
             }
             
             // Check if cache is still valid
             if ((now - cacheData.timestamp) < CACHE_TTL) {
-                console.log('Valid cache found');
+                debugLog('Valid cache found');
                 return cacheData.repos;
             }
             
             // Cache expired, remove it
-            console.log('Cache expired, clearing cache');
+            debugLog('Cache expired, clearing cache');
             localStorage.removeItem(CACHE_KEY);
             return null;
         } catch (e) {
-            console.error('Error reading cache:', e);
+            debugError('Error reading cache:', e);
             localStorage.removeItem(CACHE_KEY);
             return null;
         }
@@ -90,7 +103,7 @@ async function initializePortfolio() {
         try {
             // Validate repos before caching
             if (!repos || !repos.repos || !Array.isArray(repos.repos)) {
-                console.error('Invalid repos data, not caching');
+                debugError('Invalid repos data, not caching');
                 return;
             }
             
@@ -99,16 +112,16 @@ async function initializePortfolio() {
                 repos: repos
             };
             localStorage.setItem(CACHE_KEY, JSON.stringify(cacheData));
-            console.log('Cached', repos.repos.length, 'repositories');
+            debugLog('Cached', repos.repos.length, 'repositories');
         } catch (e) {
-            console.error('Error saving cache:', e);
+            debugError('Error saving cache:', e);
         }
     }
 
     // Try to load from cache first
     const cachedRepos = getCachedRepos();
     if (cachedRepos) {
-        console.log('Loading repositories from cache');
+        debugLog('Loading repositories from cache');
         renderRepositories(cachedRepos, true);
         return;
     }
@@ -119,7 +132,7 @@ async function initializePortfolio() {
         let useGraphQL = false;
         
         try {
-            console.log('Attempting to fetch pinned repos via GraphQL...');
+            debugLog('Attempting to fetch pinned repos via GraphQL...');
             const query = `
                 {
                     user(login: "guicybercode") {
@@ -150,38 +163,38 @@ async function initializePortfolio() {
                 body: JSON.stringify({ query })
             });
 
-            console.log('GraphQL response status:', graphqlResponse.status);
+            debugLog('GraphQL response status:', graphqlResponse.status);
 
             if (graphqlResponse.ok) {
                 const graphqlData = await graphqlResponse.json();
-                console.log('GraphQL response:', graphqlData);
+                debugLog('GraphQL response:', graphqlData);
                 
                 // Check for errors
                 if (graphqlData.errors) {
-                    console.log('GraphQL returned errors:', graphqlData.errors);
+                    debugLog('GraphQL returned errors:', graphqlData.errors);
                 } else if (graphqlData.data?.user?.pinnedItems?.nodes) {
                     repos = graphqlData.data.user.pinnedItems.nodes;
                     useGraphQL = true;
-                    console.log('GraphQL successful, found', repos.length, 'pinned repositories');
+                    debugLog('GraphQL successful, found', repos.length, 'pinned repositories');
                 }
             }
         } catch (graphqlError) {
-            console.log('GraphQL API failed, will use REST API fallback:', graphqlError);
+            debugLog('GraphQL API failed, will use REST API fallback:', graphqlError);
         }
 
         // Fallback to REST API if GraphQL failed or returned no data
         if (!useGraphQL || !repos || repos.length === 0) {
-            console.log('Using REST API fallback');
+            debugLog('Using REST API fallback');
             const response = await fetch('https://api.github.com/users/guicybercode/repos?sort=updated&per_page=6');
             
-            console.log('REST API response status:', response.status);
+            debugLog('REST API response status:', response.status);
             
             if (!response.ok) {
                 throw new Error(`REST API error: ${response.status}`);
             }
             
             const restRepos = await response.json();
-            console.log('REST API returned', restRepos.length, 'repositories');
+            debugLog('REST API returned', restRepos.length, 'repositories');
 
             if (!Array.isArray(restRepos)) {
                 throw new Error('Invalid response from GitHub API');
@@ -189,7 +202,7 @@ async function initializePortfolio() {
 
             // Filter out forks
             repos = restRepos.filter(repo => !repo.fork).slice(0, 6);
-            console.log('After filtering forks:', repos.length, 'repositories');
+            debugLog('After filtering forks:', repos.length, 'repositories');
             useGraphQL = false;
         }
 
@@ -204,7 +217,7 @@ async function initializePortfolio() {
         // Render repositories
         renderRepositories({ repos, useGraphQL });
     } catch (error) {
-        console.error('Error loading GitHub repositories:', error);
+        debugError('Error loading GitHub repositories:', error);
         portfolioContainer.innerHTML = `
             <div class="portfolio-error">
                 <p>Unable to load projects. Please check your connection or try again later.</p>
@@ -216,11 +229,11 @@ async function initializePortfolio() {
     
     // Render repositories function
     function renderRepositories(data, fromCache = false) {
-        console.log('Rendering repositories...', fromCache ? '(from cache)' : '(from API)');
+        debugLog('Rendering repositories...', fromCache ? '(from cache)' : '(from API)');
         
         // Validate data structure
         if (!data || typeof data !== 'object') {
-            console.error('Invalid data structure:', data);
+            debugError('Invalid data structure:', data);
             portfolioContainer.innerHTML = '<p class="portfolio-error">Error rendering repositories.</p>';
             return;
         }
@@ -231,12 +244,12 @@ async function initializePortfolio() {
         portfolioContainer.innerHTML = '';
 
         if (!repos || !Array.isArray(repos) || repos.length === 0) {
-            console.log('No repositories to display');
+            debugLog('No repositories to display');
             portfolioContainer.innerHTML = '<p class="portfolio-empty">No repositories found.</p>';
             return;
         }
 
-        console.log('Rendering', repos.length, 'repositories using', useGraphQL ? 'GraphQL' : 'REST', 'format');
+        debugLog('Rendering', repos.length, 'repositories using', useGraphQL ? 'GraphQL' : 'REST', 'format');
 
         // Render repositories
         repos.forEach((repo, index) => {
@@ -277,9 +290,9 @@ async function initializePortfolio() {
                 `;
 
                 portfolioContainer.appendChild(repoCard);
-                console.log(`Rendered repository ${index + 1}: ${name}`);
+                debugLog(`Rendered repository ${index + 1}: ${name}`);
             } catch (renderError) {
-                console.error(`Error rendering repository ${index}:`, renderError, repo);
+                debugError(`Error rendering repository ${index}:`, renderError, repo);
             }
         });
         
@@ -288,13 +301,14 @@ async function initializePortfolio() {
             feather.replace();
         }
         
-        console.log('Portfolio rendering complete');
+        debugLog('Portfolio rendering complete');
     }
 }
 
 // Lazy Loading for images
 function initializeLazyLoading() {
     if ('IntersectionObserver' in window) {
+        // Lazy load images
         const imageObserver = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -302,6 +316,7 @@ function initializeLazyLoading() {
                     if (img.dataset.src) {
                         img.src = img.dataset.src;
                         img.removeAttribute('data-src');
+                        img.classList.add('loaded');
                         observer.unobserve(img);
                     }
                 }
@@ -312,11 +327,39 @@ function initializeLazyLoading() {
         document.querySelectorAll('img[data-src]').forEach(img => {
             imageObserver.observe(img);
         });
+
+        // Lazy load iframes
+        const iframeObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const iframe = entry.target;
+                    if (iframe.dataset.src) {
+                        iframe.src = iframe.dataset.src;
+                        iframe.removeAttribute('data-src');
+                        iframe.classList.add('loaded');
+                        observer.unobserve(iframe);
+                    } else if (iframe.hasAttribute('loading') && iframe.getAttribute('loading') === 'lazy') {
+                        // Mark as loaded when it becomes visible
+                        iframe.classList.add('loaded');
+                        observer.unobserve(iframe);
+                    }
+                }
+            });
+        }, { rootMargin: '50px' });
+
+        // Observe all iframes with loading="lazy"
+        document.querySelectorAll('iframe[loading="lazy"]').forEach(iframe => {
+            iframeObserver.observe(iframe);
+        });
     } else {
         // Fallback for browsers without IntersectionObserver
         document.querySelectorAll('img[data-src]').forEach(img => {
             img.src = img.dataset.src;
             img.removeAttribute('data-src');
+            img.classList.add('loaded');
+        });
+        document.querySelectorAll('iframe[loading="lazy"]').forEach(iframe => {
+            iframe.classList.add('loaded');
         });
     }
 }
@@ -325,18 +368,18 @@ function initializeLazyLoading() {
 function initializeSkillsChart() {
     const canvas = document.getElementById('skillsChart');
     if (!canvas) {
-        console.log('Skills chart canvas not found');
+        debugLog('Skills chart canvas not found');
         return;
     }
 
     const skillsSection = canvas.closest('section');
     if (!skillsSection) {
-        console.log('Skills section not found');
+        debugLog('Skills section not found');
         return;
     }
 
     function createChart() {
-        console.log('Creating skills chart...');
+        debugLog('Creating skills chart...');
         const ctx = canvas.getContext('2d');
         
         try {
@@ -398,24 +441,24 @@ function initializeSkillsChart() {
                     }
                 }
             });
-            console.log('Skills chart created successfully');
+            debugLog('Skills chart created successfully');
         } catch (error) {
-            console.error('Error creating chart:', error);
+            debugError('Error creating chart:', error);
             canvas.parentElement.innerHTML = '<p>Error creating chart. Please refresh the page.</p>';
         }
     }
 
     function loadChartJS() {
-        console.log('Loading Chart.js...');
+        debugLog('Loading Chart.js...');
         const script = document.createElement('script');
         script.src = 'https://cdn.jsdelivr.net/npm/chart.js';
         script.async = true;
         script.onload = () => {
-            console.log('Chart.js loaded successfully');
+            debugLog('Chart.js loaded successfully');
             createChart();
         };
         script.onerror = () => {
-            console.error('Failed to load Chart.js');
+            debugError('Failed to load Chart.js');
             canvas.parentElement.innerHTML = '<p>Chart library failed to load. Please refresh the page.</p>';
         };
         document.head.appendChild(script);
@@ -426,7 +469,7 @@ function initializeSkillsChart() {
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    console.log('Skills section is visible, loading chart...');
+                    debugLog('Skills section is visible, loading chart...');
                     if (typeof Chart === 'undefined') {
                         loadChartJS();
                     } else {
@@ -443,7 +486,7 @@ function initializeSkillsChart() {
         observer.observe(skillsSection);
     } else {
         // Fallback: load immediately if IntersectionObserver not supported
-        console.log('IntersectionObserver not supported, loading chart immediately');
+        debugLog('IntersectionObserver not supported, loading chart immediately');
         if (typeof Chart === 'undefined') {
             loadChartJS();
         } else {
@@ -511,7 +554,7 @@ function initializeChat() {
     const messagesContainer = document.getElementById('chatMessages');
 
     if (!sendBtn || !messageInput || !usernameInput || !messagesContainer) {
-        console.log('Chat elements not found:', {
+        debugLog('Chat elements not found:', {
             sendBtn: !!sendBtn,
             messageInput: !!messageInput,
             usernameInput: !!usernameInput,
@@ -631,7 +674,7 @@ function loadChatMessages() {
             }
         })
         .catch(error => {
-            console.error('Error loading chat messages:', error);
+            debugError('Error loading chat messages:', error);
             // Don't show error to user on every poll, only log it
         });
 }
@@ -698,7 +741,7 @@ function sendMessage() {
         }
     })
     .catch(error => {
-        console.error('Error sending message:', error);
+        debugError('Error sending message:', error);
         toast.error(error.message || 'Error sending message. Please try again.');
     })
     .finally(() => {
@@ -813,7 +856,7 @@ function initializeMobileMenu() {
     const navLinks = document.querySelector('.nav-links');
     
     if (!menuToggle || !navLinks) {
-        console.log('Mobile menu elements not found');
+        debugLog('Mobile menu elements not found');
         return;
     }
     

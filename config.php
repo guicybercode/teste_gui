@@ -39,3 +39,10 @@ define('DEBUG_MODE', ENVIRONMENT === 'development');
 // Asset Versioning (for cache busting)
 define('ASSET_VERSION', '1.2');
 
+// PWA Configuration
+define('PWA_NAME', 'Cyber Mathrock');
+define('PWA_SHORT_NAME', 'CyberMathrock');
+define('PWA_DESCRIPTION', 'Software Engineer & Musician');
+define('PWA_THEME_COLOR', '#ff6b35');
+define('PWA_BACKGROUND_COLOR', '#faf8f3');
+
