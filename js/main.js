@@ -11,8 +11,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // GitHub Portfolio
 async function initializePortfolio() {
+    console.log('Initializing portfolio...');
     const portfolioContainer = document.getElementById('portfolio-container');
-    if (!portfolioContainer) return;
+    if (!portfolioContainer) {
+        console.log('Portfolio container not found');
+        return;
+    }
 
     // Show loading state with skeleton screens
     function showSkeletonLoading() {
@@ -44,21 +48,34 @@ async function initializePortfolio() {
     function getCachedRepos() {
         try {
             const cached = localStorage.getItem(CACHE_KEY);
-            if (!cached) return null;
+            if (!cached) {
+                console.log('No cache found');
+                return null;
+            }
             
             const cacheData = JSON.parse(cached);
             const now = Date.now();
             
+            // Validate cache structure
+            if (!cacheData.timestamp || !cacheData.repos) {
+                console.log('Invalid cache structure, clearing cache');
+                localStorage.removeItem(CACHE_KEY);
+                return null;
+            }
+            
             // Check if cache is still valid
-            if (cacheData.timestamp && (now - cacheData.timestamp) < CACHE_TTL) {
+            if ((now - cacheData.timestamp) < CACHE_TTL) {
+                console.log('Valid cache found');
                 return cacheData.repos;
             }
             
             // Cache expired, remove it
+            console.log('Cache expired, clearing cache');
             localStorage.removeItem(CACHE_KEY);
             return null;
         } catch (e) {
             console.error('Error reading cache:', e);
+            localStorage.removeItem(CACHE_KEY);
             return null;
         }
     }
@@ -66,11 +83,18 @@ async function initializePortfolio() {
     // Save to cache
     function setCachedRepos(repos) {
         try {
+            // Validate repos before caching
+            if (!repos || !repos.repos || !Array.isArray(repos.repos)) {
+                console.error('Invalid repos data, not caching');
+                return;
+            }
+            
             const cacheData = {
                 timestamp: Date.now(),
                 repos: repos
             };
             localStorage.setItem(CACHE_KEY, JSON.stringify(cacheData));
+            console.log('Cached', repos.repos.length, 'repositories');
         } catch (e) {
             console.error('Error saving cache:', e);
         }
@@ -90,6 +114,7 @@ async function initializePortfolio() {
         let useGraphQL = false;
         
         try {
+            console.log('Attempting to fetch pinned repos via GraphQL...');
             const query = `
                 {
                     user(login: "guicybercode") {
@@ -120,13 +145,19 @@ async function initializePortfolio() {
                 body: JSON.stringify({ query })
             });
 
+            console.log('GraphQL response status:', graphqlResponse.status);
+
             if (graphqlResponse.ok) {
                 const graphqlData = await graphqlResponse.json();
+                console.log('GraphQL response:', graphqlData);
                 
-                // If GraphQL works and has data, use it
-                if (!graphqlData.errors && graphqlData.data?.user?.pinnedItems?.nodes) {
+                // Check for errors
+                if (graphqlData.errors) {
+                    console.log('GraphQL returned errors:', graphqlData.errors);
+                } else if (graphqlData.data?.user?.pinnedItems?.nodes) {
                     repos = graphqlData.data.user.pinnedItems.nodes;
                     useGraphQL = true;
+                    console.log('GraphQL successful, found', repos.length, 'pinned repositories');
                 }
             }
         } catch (graphqlError) {
@@ -138,11 +169,14 @@ async function initializePortfolio() {
             console.log('Using REST API fallback');
             const response = await fetch('https://api.github.com/users/guicybercode/repos?sort=updated&per_page=6');
             
+            console.log('REST API response status:', response.status);
+            
             if (!response.ok) {
                 throw new Error(`REST API error: ${response.status}`);
             }
             
             const restRepos = await response.json();
+            console.log('REST API returned', restRepos.length, 'repositories');
 
             if (!Array.isArray(restRepos)) {
                 throw new Error('Invalid response from GitHub API');
@@ -150,13 +184,17 @@ async function initializePortfolio() {
 
             // Filter out forks
             repos = restRepos.filter(repo => !repo.fork).slice(0, 6);
+            console.log('After filtering forks:', repos.length, 'repositories');
             useGraphQL = false;
         }
 
-        // Cache the results
-        if (repos && repos.length > 0) {
-            setCachedRepos({ repos, useGraphQL });
+        // Validate repos before caching/rendering
+        if (!repos || !Array.isArray(repos) || repos.length === 0) {
+            throw new Error('No valid repositories found');
         }
+
+        // Cache the results
+        setCachedRepos({ repos, useGraphQL });
 
         // Render repositories
         renderRepositories({ repos, useGraphQL });
@@ -166,14 +204,20 @@ async function initializePortfolio() {
             <div class="portfolio-error">
                 <p>Unable to load projects. Please check your connection or try again later.</p>
                 <p class="error-details">Error: ${error.message}</p>
+                <button onclick="initializePortfolio()" style="margin-top: 1rem; padding: 0.5rem 1rem; background: var(--link-color); color: white; border: none; cursor: pointer;">Retry</button>
             </div>
         `;
     }
     
     // Render repositories function
     function renderRepositories(data, fromCache = false) {
-        if (fromCache) {
-            data = data; // data is already { repos, useGraphQL }
+        console.log('Rendering repositories...', fromCache ? '(from cache)' : '(from API)');
+        
+        // Validate data structure
+        if (!data || typeof data !== 'object') {
+            console.error('Invalid data structure:', data);
+            portfolioContainer.innerHTML = '<p class="portfolio-error">Error rendering repositories.</p>';
+            return;
         }
         
         const { repos, useGraphQL } = data;
@@ -181,44 +225,54 @@ async function initializePortfolio() {
         // Clear loading state
         portfolioContainer.innerHTML = '';
 
-        if (!repos || repos.length === 0) {
+        if (!repos || !Array.isArray(repos) || repos.length === 0) {
+            console.log('No repositories to display');
             portfolioContainer.innerHTML = '<p class="portfolio-empty">No repositories found.</p>';
             return;
         }
 
+        console.log('Rendering', repos.length, 'repositories using', useGraphQL ? 'GraphQL' : 'REST', 'format');
+
         // Render repositories
-        repos.forEach(repo => {
-            const repoCard = document.createElement('div');
-            repoCard.className = 'portfolio-item fade-in';
+        repos.forEach((repo, index) => {
+            try {
+                const repoCard = document.createElement('div');
+                repoCard.className = 'portfolio-item fade-in';
 
-            let name, url, description, language, stars;
+                let name, url, description, language, stars;
 
-            if (useGraphQL) {
-                name = repo.name;
-                url = repo.url;
-                description = repo.description || 'No description available.';
-                language = repo.languages?.nodes?.[0]?.name || 'N/A';
-                stars = repo.stargazerCount || 0;
-            } else {
-                name = repo.name;
-                url = repo.html_url;
-                description = repo.description || 'No description available.';
-                language = repo.language || 'N/A';
-                stars = repo.stargazers_count || 0;
+                if (useGraphQL) {
+                    name = repo.name || 'Unnamed';
+                    url = repo.url || '#';
+                    description = repo.description || 'No description available.';
+                    language = repo.languages?.nodes?.[0]?.name || 'N/A';
+                    stars = repo.stargazerCount || 0;
+                } else {
+                    name = repo.name || 'Unnamed';
+                    url = repo.html_url || '#';
+                    description = repo.description || 'No description available.';
+                    language = repo.language || 'N/A';
+                    stars = repo.stargazers_count || 0;
+                }
+
+                repoCard.innerHTML = `
+                    <h3><a href="${url}" target="_blank" rel="noopener noreferrer">${name}</a></h3>
+                    <p class="portfolio-description">${description}</p>
+                    <div class="portfolio-meta">
+                        <span class="portfolio-language">${language}</span>
+                        <span class="portfolio-stars">⭐ ${stars}</span>
+                    </div>
+                    <a href="${url}" target="_blank" rel="noopener noreferrer" class="portfolio-link">View on GitHub →</a>
+                `;
+
+                portfolioContainer.appendChild(repoCard);
+                console.log(`Rendered repository ${index + 1}: ${name}`);
+            } catch (renderError) {
+                console.error(`Error rendering repository ${index}:`, renderError, repo);
             }
-
-            repoCard.innerHTML = `
-                <h3><a href="${url}" target="_blank" rel="noopener noreferrer">${name}</a></h3>
-                <p class="portfolio-description">${description}</p>
-                <div class="portfolio-meta">
-                    <span class="portfolio-language">${language}</span>
-                    <span class="portfolio-stars">⭐ ${stars}</span>
-                </div>
-                <a href="${url}" target="_blank" rel="noopener noreferrer" class="portfolio-link">View on GitHub →</a>
-            `;
-
-            portfolioContainer.appendChild(repoCard);
         });
+        
+        console.log('Portfolio rendering complete');
     }
 }
 
@@ -254,19 +308,94 @@ function initializeLazyLoading() {
 // Skills Visualization Chart
 function initializeSkillsChart() {
     const canvas = document.getElementById('skillsChart');
-    if (!canvas) return;
+    if (!canvas) {
+        console.log('Skills chart canvas not found');
+        return;
+    }
 
-    // Lazy load Chart.js only when skills section is visible
     const skillsSection = canvas.closest('section');
-    if (!skillsSection) return;
+    if (!skillsSection) {
+        console.log('Skills section not found');
+        return;
+    }
 
-    // Check if Chart.js is already loaded
-    if (typeof Chart === 'undefined') {
-        // Load Chart.js dynamically
+    function createChart() {
+        console.log('Creating skills chart...');
+        const ctx = canvas.getContext('2d');
+        
+        try {
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Programming', 'Music', 'Languages', 'Systems', 'Cloud', 'Reading', 'Composition', 'Linux'],
+                    datasets: [{
+                        label: 'Skill Level',
+                        data: [85, 80, 75, 80, 70, 85, 75, 85],
+                        backgroundColor: 'rgba(255, 107, 53, 0.15)',
+                        borderColor: 'rgba(255, 107, 53, 0.8)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(255, 107, 53, 1)',
+                        pointBorderColor: '#ffffff',
+                        pointHoverBackgroundColor: '#ffffff',
+                        pointHoverBorderColor: 'rgba(255, 107, 53, 1)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                stepSize: 20,
+                                color: '#7a7a7a',
+                                font: {
+                                    size: 11
+                                }
+                            },
+                            grid: {
+                                color: '#e8e5df'
+                            },
+                            pointLabels: {
+                                color: '#4a4a4a',
+                                font: {
+                                    size: 12,
+                                    family: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(255, 255, 255, 0.98)',
+                            titleColor: '#2d2d2d',
+                            bodyColor: '#4a4a4a',
+                            borderColor: '#e8e5df',
+                            borderWidth: 1,
+                            padding: 12,
+                            boxPadding: 6
+                        }
+                    }
+                }
+            });
+            console.log('Skills chart created successfully');
+        } catch (error) {
+            console.error('Error creating chart:', error);
+            canvas.parentElement.innerHTML = '<p>Error creating chart. Please refresh the page.</p>';
+        }
+    }
+
+    function loadChartJS() {
+        console.log('Loading Chart.js...');
         const script = document.createElement('script');
         script.src = 'https://cdn.jsdelivr.net/npm/chart.js';
         script.async = true;
         script.onload = () => {
+            console.log('Chart.js loaded successfully');
             createChart();
         };
         script.onerror = () => {
@@ -274,71 +403,6 @@ function initializeSkillsChart() {
             canvas.parentElement.innerHTML = '<p>Chart library failed to load. Please refresh the page.</p>';
         };
         document.head.appendChild(script);
-    } else {
-        createChart();
-    }
-
-    function createChart() {
-        const ctx = canvas.getContext('2d');
-        
-        new Chart(ctx, {
-            type: 'radar',
-            data: {
-                labels: ['Programming', 'Music', 'Languages', 'Systems', 'Cloud', 'Reading', 'Composition', 'Linux'],
-                datasets: [{
-                    label: 'Skill Level',
-                    data: [85, 80, 75, 80, 70, 85, 75, 85],
-                    backgroundColor: 'rgba(255, 107, 53, 0.15)',
-                    borderColor: 'rgba(255, 107, 53, 0.8)',
-                    borderWidth: 2,
-                    pointBackgroundColor: 'rgba(255, 107, 53, 1)',
-                    pointBorderColor: '#ffffff',
-                    pointHoverBackgroundColor: '#ffffff',
-                    pointHoverBorderColor: 'rgba(255, 107, 53, 1)'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                scales: {
-                    r: {
-                        beginAtZero: true,
-                        max: 100,
-                        ticks: {
-                            stepSize: 20,
-                            color: '#7a7a7a',
-                            font: {
-                                size: 11
-                            }
-                        },
-                        grid: {
-                            color: '#e8e5df'
-                        },
-                        pointLabels: {
-                            color: '#4a4a4a',
-                            font: {
-                                size: 12,
-                                family: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
-                            }
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    tooltip: {
-                        backgroundColor: 'rgba(255, 255, 255, 0.98)',
-                        titleColor: '#2d2d2d',
-                        bodyColor: '#4a4a4a',
-                        borderColor: '#e8e5df',
-                        borderWidth: 1,
-                        padding: 12,
-                        boxPadding: 6
-                    }
-                }
-            }
-        });
     }
 
     // Use IntersectionObserver to load Chart.js only when section is visible
@@ -346,19 +410,9 @@ function initializeSkillsChart() {
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    // Section is visible, initialize chart
+                    console.log('Skills section is visible, loading chart...');
                     if (typeof Chart === 'undefined') {
-                        const script = document.createElement('script');
-                        script.src = 'https://cdn.jsdelivr.net/npm/chart.js';
-                        script.async = true;
-                        script.onload = () => {
-                            createChart();
-                        };
-                        script.onerror = () => {
-                            console.error('Failed to load Chart.js');
-                            canvas.parentElement.innerHTML = '<p>Chart library failed to load. Please refresh the page.</p>';
-                        };
-                        document.head.appendChild(script);
+                        loadChartJS();
                     } else {
                         createChart();
                     }
@@ -373,14 +427,9 @@ function initializeSkillsChart() {
         observer.observe(skillsSection);
     } else {
         // Fallback: load immediately if IntersectionObserver not supported
+        console.log('IntersectionObserver not supported, loading chart immediately');
         if (typeof Chart === 'undefined') {
-            const script = document.createElement('script');
-            script.src = 'https://cdn.jsdelivr.net/npm/chart.js';
-            script.async = true;
-            script.onload = () => {
-                createChart();
-            };
-            document.head.appendChild(script);
+            loadChartJS();
         } else {
             createChart();
         }
@@ -442,15 +491,39 @@ function initializeChat() {
     const sendBtn = document.getElementById('sendChatBtn');
     const messageInput = document.getElementById('chatMessage');
     const usernameInput = document.getElementById('chatUsername');
-    const messagesContainer = document.getElementById('chat-messages');
+    const messagesContainer = document.getElementById('chatMessages');
 
-    if (!sendBtn || !messageInput || !usernameInput || !messagesContainer) return;
+    if (!sendBtn || !messageInput || !usernameInput || !messagesContainer) {
+        console.log('Chat elements not found:', {
+            sendBtn: !!sendBtn,
+            messageInput: !!messageInput,
+            usernameInput: !!usernameInput,
+            messagesContainer: !!messagesContainer
+        });
+        return;
+    }
 
     // Track user scroll behavior
     messagesContainer.addEventListener('scroll', function() {
         const isNearBottom = messagesContainer.scrollHeight - messagesContainer.scrollTop - messagesContainer.clientHeight < 100;
         shouldAutoScroll = isNearBottom;
         userScrollPosition = messagesContainer.scrollTop;
+    });
+
+    // Send message on button click
+    sendBtn.addEventListener('click', sendMessage);
+
+    // Send message on Enter key
+    messageInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            sendMessage();
+        }
+    });
+
+    usernameInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            messageInput.focus();
+        }
     });
 
     // Load existing messages
@@ -481,23 +554,6 @@ function stopChatPolling() {
         clearInterval(chatPollingInterval);
         chatPollingInterval = null;
     }
-}
-
-    // Send message on button click
-    sendBtn.addEventListener('click', sendMessage);
-
-    // Send message on Enter key
-    messageInput.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            sendMessage();
-        }
-    });
-
-    usernameInput.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            messageInput.focus();
-        }
-    });
 }
 
 function loadChatMessages() {
