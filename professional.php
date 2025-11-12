@@ -2,40 +2,20 @@
 <html lang="en">
 <head>
     <?php
-    // Load configuration for dynamic URLs
     require_once __DIR__ . '/config.php';
     $siteUrl = rtrim(SITE_URL, '/');
     $siteDomain = SITE_DOMAIN;
     ?>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cyber Mathrock - Software Engineer & Music</title>
+    <title>Professional Background - Cyber Mathrock</title>
     
-    <!-- SEO Meta Tags -->
-    <meta name="description" content="Personal website of Cyber Mathrock - Software Engineer & Musician. Portfolio, skills, music covers, and blog.">
-    <meta name="keywords" content="software engineer, musician, guitar, programming, portfolio, cyber mathrock">
-    <meta name="author" content="Cyber Mathrock">
+    <meta name="description" content="Professional background and technical skills of Cyber Mathrock - Software Engineer.">
     <meta name="robots" content="index, follow">
-    <link rel="canonical" href="<?php echo htmlspecialchars($siteUrl); ?>/">
+    <link rel="canonical" href="<?php echo htmlspecialchars($siteUrl); ?>/professional.php">
     
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="<?php echo htmlspecialchars($siteUrl); ?>/">
-    <meta property="og:title" content="Cyber Mathrock - Software Engineer & Music">
-    <meta property="og:description" content="Personal website of Cyber Mathrock - Software Engineer & Musician. Portfolio, skills, music covers, and blog.">
-    <meta property="og:image" content="<?php echo htmlspecialchars($siteUrl); ?>/images/og-image.jpg">
-    
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:url" content="<?php echo htmlspecialchars($siteUrl); ?>/">
-    <meta name="twitter:title" content="Cyber Mathrock - Software Engineer & Music">
-    <meta name="twitter:description" content="Personal website of Cyber Mathrock - Software Engineer & Musician. Portfolio, skills, music covers, and blog.">
-    <meta name="twitter:image" content="<?php echo htmlspecialchars($siteUrl); ?>/images/og-image.jpg">
-    
-    <!-- Resource Hints -->
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
     <link rel="dns-prefetch" href="https://api.github.com">
-    <link rel="dns-prefetch" href="https://www.youtube.com">
     <link rel="dns-prefetch" href="https://fonts.googleapis.com">
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
@@ -43,55 +23,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     
-    <!-- Google Fonts - Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Feather Icons -->
     <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
-    
-    <!-- Stylesheet -->
     <link rel="stylesheet" href="css/style.css?v=<?php echo ASSET_VERSION; ?>">
-    
-    <!-- Structured Data (JSON-LD) -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Person",
-        "name": "Cyber Mathrock",
-        "jobTitle": "Software Engineer & Musician",
-        "url": "<?php echo htmlspecialchars($siteUrl); ?>",
-        "sameAs": [
-            "https://github.com/guicybercode",
-            "https://www.linkedin.com/in/guilherme-monteiro-3653b51a7/",
-            "https://youtube.com/@moonguip"
-        ],
-        "knowsLanguage": ["Portuguese", "English", "Korean", "Thai", "Icelandic"],
-        "address": {
-            "@type": "PostalAddress",
-            "addressCountry": "BR"
-        }
-    }
-    </script>
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "WebSite",
-        "name": "Cyber Mathrock",
-        "url": "<?php echo htmlspecialchars($siteUrl); ?>",
-        "author": {
-            "@type": "Person",
-            "name": "Cyber Mathrock"
-        }
-    }
-    </script>
-    
-    <!-- Chart.js will be loaded dynamically when skills section is visible -->
 </head>
 <body>
-    <!-- Skip to main content link -->
     <a href="#main-content" class="skip-link">Skip to main content</a>
     
-    <!-- Top Navigation Bar -->
     <nav class="top-nav" role="navigation" aria-label="Main navigation">
         <div class="nav-container">
             <div class="nav-logo">
@@ -121,7 +59,6 @@
     </nav>
 
     <div class="page-container">
-        <!-- Left Sidebar -->
         <aside class="sidebar" role="complementary" aria-label="Site navigation">
             <div class="sidebar-content">
                 <h3>Navigation</h3>
@@ -143,13 +80,9 @@
             </div>
         </aside>
 
-        <!-- Main Content Area -->
         <main class="main-content" id="main-content" role="main">
-            <!-- Article Header -->
-            <header class="article-header">
-            </header>
+            <header class="article-header"></header>
 
-            <!-- Personal Infobox (Wikipedia-style right sidebar) -->
             <aside class="infobox" role="complementary" aria-label="Personal information">
                 <h2>Cyber Mathrock</h2>
                 <div class="infobox-content">
@@ -180,40 +113,28 @@
                 </div>
             </aside>
 
-            <!-- Article Content -->
             <article class="article-content">
-                <!-- About Me Section -->
-                <section id="about">
-                    <h2>About Me</h2>
-                    <p>Brazilian software engineer and musician pursuing Information Systems. I bridge low-level programming (C, Rust), Linux systems (Gentoo, NixOS), and scalable development with Java, Python, TypeScript, and C#. Experienced with AWS, Azure, and Oracle OCI.</p>
-                    <p>Fluent in Portuguese and English, conversational in Korean, Thai, and Icelandic. As a composer and performer, I blend technical precision with creative intuition.</p>
+                <section id="professional">
+                    <h2>Professional Background</h2>
+                    <p>My technical journey spans from low-level systems programming to high-level application development.</p>
                     
-                    <!-- Photo placeholder -->
-                    <div class="photo-placeholder" role="img" aria-label="Photo placeholder for personal image"></div>
-                </section>
+                    <h3>Technologies</h3>
+                    <ul>
+                        <li><strong>Low-level:</strong> C, Rust</li>
+                        <li><strong>Systems:</strong> Linux (Gentoo, NixOS)</li>
+                        <li><strong>Application:</strong> Java, Python, TypeScript, C#</li>
+                        <li><strong>Cloud:</strong> AWS, Azure, Oracle OCI</li>
+                    </ul>
 
-                <!-- Featured Cover: aespa -->
-                <section id="featured-cover">
-                    <h2>Featured Cover: aespa</h2>
-                    <div class="video-container">
-                        <iframe 
-                            width="560" 
-                            height="315" 
-                            src="https://www.youtube.com/embed/fvkk-S3XDEc?rel=0" 
-                            title="aespa Cover" 
-                            frameborder="0" 
-                            loading="lazy"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                            allowfullscreen>
-                        </iframe>
+                    <h3>Skills Overview</h3>
+                    <div class="skills-container">
+                        <canvas id="skillsChart"></canvas>
                     </div>
-                    <p><a href="https://youtube.com/shorts/fvkk-S3XDEc" target="_blank" rel="noopener noreferrer">Watch on YouTube →</a> | <a href="https://youtube.com/@moonguip" target="_blank" rel="noopener noreferrer">Check out more covers on my YouTube channel →</a></p>
                 </section>
             </article>
         </main>
     </div>
 
-    <!-- Footer -->
     <footer class="page-footer">
         <p>&copy; 2025 Cyber Mathrock. Software Engineer & Music</p>
     </footer>
@@ -221,7 +142,6 @@
     <script src="js/toast.js?v=<?php echo ASSET_VERSION; ?>"></script>
     <script src="js/main.js?v=<?php echo ASSET_VERSION; ?>"></script>
     <script>
-        // Initialize Feather Icons after page loads
         document.addEventListener('DOMContentLoaded', function() {
             if (typeof feather !== 'undefined') {
                 feather.replace();
@@ -230,3 +150,4 @@
     </script>
 </body>
 </html>
+
