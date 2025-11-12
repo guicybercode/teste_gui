@@ -122,6 +122,8 @@
                     </ol>
                     
                     <p>I read an average of <strong>30 books per month</strong>—some for pure enjoyment and hobby, others for projects and study. This voracious reading habit keeps me constantly learning and growing, whether I'm diving into technical documentation, exploring new programming concepts, or immersing myself in literature from different cultures.</p>
+                    
+                    <div class="photo-placeholder" role="img" aria-label="Photo placeholder for reading and books"></div>
                 </section>
             </article>
         </main>
