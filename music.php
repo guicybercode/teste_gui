@@ -114,11 +114,20 @@
                     <p>Music is a core part of my identity. I compose, perform, and experiment with digital and analog tools, blending my technical background with creative intuition.</p>
                     
                     <h3>Guitar</h3>
-                    <p>I play both 6-string and 7-string guitars, exploring various musical styles and techniques. The extended range allows for deeper tonalities and complex harmonic structures.</p>
+                    <p>I play both 6-string and 7-string guitars, exploring various musical styles and techniques. The extended range allows for deeper tonalities and complex harmonic structures. As an instrumental musician and church guitarist, I use my musical gifts to serve and lead others in worship.</p>
                     
                     <div class="photo-placeholder" role="img" aria-label="Photo placeholder for guitar and music"></div>
                     
                     <p><a href="https://youtube.com/@moonguip" target="_blank" rel="noopener noreferrer">Check out more covers on my YouTube channel →</a></p>
+                    
+                    <h3>Composition</h3>
+                    <p>I create original compositions across various styles and genres. My work includes <strong>chiptune</strong> pieces that blend retro gaming aesthetics with modern production, <strong>piano</strong> compositions that explore emotional depth and technical complexity, and <strong>acoustic</strong> arrangements that showcase intimate, organic soundscapes.</p>
+                    
+                    <p>As an instrumental musician, I focus on creating music that speaks without words, using melody, harmony, and rhythm to convey emotion and tell stories. My compositions often reflect my technical background, incorporating structured approaches while maintaining creative freedom.</p>
+                    
+                    <p>You can find my compositions on <a href="https://soundcloud.com" target="_blank" rel="noopener noreferrer">SoundCloud</a>, where I share my latest works and experiments. Whether it's a chiptune track inspired by classic video games, a piano piece exploring new harmonic territories, or an acoustic arrangement capturing a moment of inspiration, each composition represents a unique intersection of my technical skills and creative vision.</p>
+                    
+                    <div class="photo-placeholder" role="img" aria-label="Photo placeholder for composition and music production"></div>
                 </section>
             </article>
         </main>
