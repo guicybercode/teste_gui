@@ -9,6 +9,12 @@ if (!defined('SITE_URL')) {
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+
+// Generate CSP nonce if not already set
+if (!isset($_SESSION['csp_nonce'])) {
+    $_SESSION['csp_nonce'] = base64_encode(random_bytes(16));
+}
+
 $siteUrl = rtrim(SITE_URL, '/');
 $siteDomain = SITE_DOMAIN;
 $pageTitle = isset($pageTitle) ? $pageTitle : 'Cyber Mathrock - Software Engineer & Music';
