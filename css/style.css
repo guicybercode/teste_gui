@@ -398,7 +398,34 @@ body {
     color: var(--text-primary);
     margin-top: 2rem;
     margin-bottom: 1rem;
-    letter-spacing: -0.2px;
+}
+
+.article-content blockquote {
+    background: var(--bg-tertiary);
+    border-left: 4px solid var(--link-color);
+    padding: 1.5rem 2rem;
+    margin: 2rem 0;
+    font-style: italic;
+    color: var(--text-secondary);
+    box-shadow: 0 2px 6px var(--shadow-soft);
+}
+
+.article-content blockquote p {
+    margin: 0.5rem 0;
+}
+
+.article-content blockquote p:first-child {
+    margin-top: 0;
+}
+
+.article-content blockquote p:last-child {
+    margin-bottom: 0;
+}
+
+.article-content blockquote strong {
+    color: var(--text-primary);
+    font-weight: 600;
+    font-style: normal;
 }
 
 .article-content p {

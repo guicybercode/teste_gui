@@ -163,7 +163,7 @@
                     </div>
                     <div class="infobox-item">
                         <span class="infobox-label">Languages</span>
-                        <span class="infobox-value">Portuguese, English, Korean, Thai, Icelandic</span>
+                        <span class="infobox-value">Português, English, 한국어, ไทย, Íslenska, 台語</span>
                     </div>
                     <div class="infobox-item">
                         <span class="infobox-label">GitHub</span>
@@ -248,7 +248,18 @@
                 <!-- Languages & Culture Section -->
                 <section id="languages">
                     <h2>Languages & Culture</h2>
-                    <p>Language learning is one of my passions. Fluent in Portuguese and English, conversational in Korean, Thai, and Icelandic. This multilingual ability helps me connect with global cultures and approach problems from multiple perspectives.</p>
+                    <p>Language learning is one of my greatest passions. I speak multiple languages, each opening doors to different cultures and ways of thinking:</p>
+                    
+                    <ul>
+                        <li><strong>Português</strong> (Portuguese) - Native</li>
+                        <li><strong>English</strong> - Fluent</li>
+                        <li><strong>한국어</strong> (Korean) - Conversational</li>
+                        <li><strong>ไทย</strong> (Thai) - Conversational</li>
+                        <li><strong>Íslenska</strong> (Icelandic) - Conversational</li>
+                        <li><strong>台語</strong> (Taigi/Taiwanese) - Currently studying</li>
+                    </ul>
+                    
+                    <p>This multilingual ability helps me connect with global cultures and approach problems from multiple perspectives. I have also worked as a translator for open-source projects, contributing translations to <strong>NixOS</strong>, <strong>Arch Linux</strong>, and other tech projects, helping make technology more accessible to speakers of different languages.</p>
                     
                     <!-- Photo placeholder -->
                     <div class="photo-placeholder" role="img" aria-label="Photo placeholder for personal image"></div>
@@ -258,12 +269,32 @@
                 <section id="reading">
                     <h2>Reading & Learning</h2>
                     <p>Reading has been fundamental to my growth. It allows me to continuously learn, explore new ideas, and stay informed about technology, music, culture, and faith.</p>
+                    
+                    <h3>Favorite Books</h3>
+                    <p>My favorite books, in order of preference:</p>
+                    <ol>
+                        <li><strong>The Bible</strong> - By far my number one favorite. It's the foundation of my faith and a constant source of wisdom, guidance, and inspiration.</li>
+                        <li><strong>Pachinko</strong> by Min Jin Lee - A powerful multigenerational story that deeply resonates with me.</li>
+                        <li><strong>The Hobbit</strong> by J.R.R. Tolkien - A timeless adventure that sparked my love for fantasy literature.</li>
+                    </ol>
+                    
+                    <p>I read an average of <strong>30 books per month</strong>—some for pure enjoyment and hobby, others for projects and study. This voracious reading habit keeps me constantly learning and growing, whether I'm diving into technical documentation, exploring new programming concepts, or immersing myself in literature from different cultures.</p>
                 </section>
 
                 <!-- Faith Section -->
                 <section id="faith">
                     <h2>Faith</h2>
-                    <p>My Christian faith is very important to me and forms the foundation of my values. It guides my decisions, shapes my relationships, and influences how I view my work and creativity.</p>
+                    <p>My faith in Christ comes first in my life. It is the foundation of everything I do, guiding my decisions, shaping my relationships, and influencing how I view my work and creativity.</p>
+                    
+                    <blockquote>
+                        <p><strong>Romans 8:37</strong></p>
+                        <p>"No, in all these things we are more than conquerors through him who loved us."</p>
+                        <p style="font-style: italic; margin-top: 0.5rem;">"Não, em todas estas coisas somos mais que vencedores, por meio daquele que nos amou."</p>
+                    </blockquote>
+                    
+                    <p>I serve as a <strong>church guitarist</strong>, using my musical gifts to worship and lead others in praise. Music and faith are deeply intertwined in my life—each note I play is an expression of gratitude and devotion to God.</p>
+                    
+                    <p>My Christian faith is not just a part of who I am—it is the core of my identity. It gives me purpose, strength, and hope, and it's the lens through which I see the world and my place in it.</p>
                 </section>
 
                 <!-- Contact & Links Section -->
