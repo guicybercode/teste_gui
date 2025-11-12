@@ -101,10 +101,6 @@
                         <span class="infobox-label">GitHub</span>
                         <span class="infobox-value"><a href="https://github.com/guicybercode" target="_blank" rel="noopener noreferrer">guicybercode</a></span>
                     </div>
-                    <div class="infobox-item">
-                        <span class="infobox-label">LinkedIn</span>
-                        <span class="infobox-value"><a href="https://www.linkedin.com/in/guilherme-monteiro-3653b51a7/" target="_blank" rel="noopener noreferrer">Profile</a></span>
-                    </div>
                 </div>
             </aside>
 

@@ -173,10 +173,6 @@
                         <span class="infobox-label">GitHub</span>
                         <span class="infobox-value"><a href="https://github.com/guicybercode" target="_blank" rel="noopener noreferrer">guicybercode</a></span>
                     </div>
-                    <div class="infobox-item">
-                        <span class="infobox-label">LinkedIn</span>
-                        <span class="infobox-value"><a href="https://www.linkedin.com/in/guilherme-monteiro-3653b51a7/" target="_blank" rel="noopener noreferrer">Profile</a></span>
-                    </div>
                 </div>
             </aside>
 
@@ -190,6 +186,8 @@
                     <p>Fluent in Portuguese and English, conversational in Korean, Thai, and Icelandic. As a composer and performer, I blend technical precision with creative intuition.</p>
                     
                     <p>I'm passionate about <strong>open source</strong> and actively contribute to various projects. I've worked as a translator for <strong>NixOS</strong>, <strong>Arch Linux</strong>, and other tech projects, helping make technology more accessible to speakers of different languages. Open source is not just about code for me—it's about building community, sharing knowledge, and making technology better for everyone.</p>
+                    
+                    <p>I'm a strong supporter of the <strong>free software movement</strong>. I believe that software freedom is essential for a better world—it empowers users, promotes transparency, encourages innovation, and ensures that technology serves humanity rather than controlling it. Free software aligns with my values of freedom, collaboration, and the right to understand and modify the tools we use.</p>
                     
                     <p>Beyond code and music, I'm an avid reader (averaging 30 books per month), a language enthusiast studying multiple languages including Taigi, and a church guitarist where I serve through music. My Christian faith is the foundation of everything I do, guiding my values, decisions, and how I approach both my technical work and creative pursuits.</p>
                     
