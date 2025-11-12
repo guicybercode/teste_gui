@@ -27,22 +27,6 @@ include __DIR__ . '/includes/header.php';
                 
                 <!-- Photo placeholder -->
                 <div class="photo-placeholder" role="img" aria-label="Photo placeholder for personal image"></div>
-                
-                <!-- Social Share -->
-                <div class="social-share">
-                    <a href="https://twitter.com/intent/tweet?url=<?php echo urlencode($canonicalUrl); ?>&text=<?php echo urlencode($pageTitle); ?>" target="_blank" rel="noopener noreferrer" class="social-share-btn">
-                        <i data-feather="twitter"></i>
-                        <span>Share on Twitter</span>
-                    </a>
-                    <a href="https://www.facebook.com/sharer/sharer.php?u=<?php echo urlencode($canonicalUrl); ?>" target="_blank" rel="noopener noreferrer" class="social-share-btn">
-                        <i data-feather="facebook"></i>
-                        <span>Share on Facebook</span>
-                    </a>
-                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=<?php echo urlencode($canonicalUrl); ?>" target="_blank" rel="noopener noreferrer" class="social-share-btn">
-                        <i data-feather="linkedin"></i>
-                        <span>Share on LinkedIn</span>
-                    </a>
-                </div>
             </section>
 
             <!-- Featured Cover: aespa -->
