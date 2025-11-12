@@ -133,7 +133,6 @@
         <main class="main-content" id="main-content" role="main">
             <!-- Article Header -->
             <header class="article-header">
-                <p class="subtitle">Software Engineer & Music</p>
             </header>
 
             <!-- Personal Infobox (Wikipedia-style right sidebar) -->
