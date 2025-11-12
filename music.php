@@ -117,11 +117,7 @@
                     <p><a href="https://youtube.com/@moonguip" target="_blank" rel="noopener noreferrer">Check out more covers on my YouTube channel →</a></p>
                     
                     <h3>Composition</h3>
-                    <p>I create original compositions across various styles and genres. My work includes <strong>chiptune</strong> pieces that blend retro gaming aesthetics with modern production, <strong>piano</strong> compositions that explore emotional depth and technical complexity, and <strong>acoustic</strong> arrangements that showcase intimate, organic soundscapes.</p>
-                    
-                    <p>As an instrumental musician, I focus on creating music that speaks without words, using melody, harmony, and rhythm to convey emotion and tell stories. My compositions often reflect my technical background, incorporating structured approaches while maintaining creative freedom.</p>
-                    
-                    <p>You can find my compositions on <a href="https://soundcloud.com" target="_blank" rel="noopener noreferrer">SoundCloud</a>, where I share my latest works and experiments. Whether it's a chiptune track inspired by classic video games, a piano piece exploring new harmonic territories, or an acoustic arrangement capturing a moment of inspiration, each composition represents a unique intersection of my technical skills and creative vision.</p>
+                    <p>I create original compositions across various styles, including <strong>chiptune</strong>, <strong>piano</strong>, and <strong>acoustic</strong> pieces. As an instrumental musician, I focus on creating music that speaks without words, using melody and harmony to convey emotion. You can find my compositions on <a href="https://soundcloud.com" target="_blank" rel="noopener noreferrer">SoundCloud</a>.</p>
                     
                     <div class="photo-placeholder" role="img" aria-label="Photo placeholder for composition and music production"></div>
                 </section>

@@ -110,14 +110,9 @@
                     <p>Reading has been fundamental to my growth. It allows me to continuously learn, explore new ideas, and stay informed about technology, music, culture, and faith.</p>
                     
                     <h3>Favorite Books</h3>
-                    <p>My favorite books, in order of preference:</p>
-                    <ol>
-                        <li><strong>The Bible</strong> - By far my number one favorite. It's the foundation of my faith and a constant source of wisdom, guidance, and inspiration.</li>
-                        <li><strong>Pachinko</strong> by Min Jin Lee - A powerful multigenerational story that deeply resonates with me.</li>
-                        <li><strong>The Hobbit</strong> by J.R.R. Tolkien - A timeless adventure that sparked my love for fantasy literature.</li>
-                    </ol>
+                    <p>My favorite books: <strong>The Bible</strong> (by far my number one favorite), <strong>Pachinko</strong> by Min Jin Lee, and <strong>The Hobbit</strong> by J.R.R. Tolkien.</p>
                     
-                    <p>I read an average of <strong>30 books per month</strong>—some for pure enjoyment and hobby, others for projects and study. This voracious reading habit keeps me constantly learning and growing, whether I'm diving into technical documentation, exploring new programming concepts, or immersing myself in literature from different cultures.</p>
+                    <p>I read an average of <strong>30 books per month</strong>—some for enjoyment, others for projects and study. This reading habit keeps me constantly learning, whether exploring technical documentation, programming concepts, or literature from different cultures.</p>
                     
                     <div class="photo-placeholder" role="img" aria-label="Photo placeholder for reading and books"></div>
                 </section>
