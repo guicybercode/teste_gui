@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/config.php';
 $pageTitle = 'Live Chat - Cyber Mathrock';
 $pageDescription = 'Live chat with Cyber Mathrock.';
 $canonicalUrl = rtrim(SITE_URL, '/') . '/chat-page.php';

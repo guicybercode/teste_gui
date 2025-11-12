@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/config.php';
 $pageTitle = 'Music & Creativity - Cyber Mathrock';
 $pageDescription = 'Music and creativity of Cyber Mathrock - Guitarist and composer.';
 $canonicalUrl = rtrim(SITE_URL, '/') . '/music.php';

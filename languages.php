@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/config.php';
 $pageTitle = 'Languages & Culture - Cyber Mathrock';
 $pageDescription = 'Languages and cultural interests of Cyber Mathrock.';
 $canonicalUrl = rtrim(SITE_URL, '/') . '/languages.php';

@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/config.php';
 $pageTitle = 'Faith - Cyber Mathrock';
 $pageDescription = 'Christian faith and beliefs of Cyber Mathrock.';
 $canonicalUrl = rtrim(SITE_URL, '/') . '/faith.php';

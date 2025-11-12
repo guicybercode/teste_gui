@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/config.php';
 $pageTitle = 'Portfolio - Cyber Mathrock';
 $pageDescription = 'GitHub projects portfolio of Cyber Mathrock - Software Engineer.';
 $canonicalUrl = rtrim(SITE_URL, '/') . '/portfolio.php';

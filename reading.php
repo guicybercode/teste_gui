@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/config.php';
 $pageTitle = 'Reading & Learning - Cyber Mathrock';
 $pageDescription = 'Reading habits and favorite books of Cyber Mathrock.';
 $canonicalUrl = rtrim(SITE_URL, '/') . '/reading.php';

@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/config.php';
 $pageTitle = 'Professional Background - Cyber Mathrock';
 $pageDescription = 'Professional background and technical skills of Cyber Mathrock - Software Engineer.';
 $canonicalUrl = rtrim(SITE_URL, '/') . '/professional.php';
