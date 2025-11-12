@@ -201,7 +201,7 @@
 
                 <!-- Featured Cover: aespa -->
                 <section id="featured-cover">
-                    <h2>Tocando Guitarra</h2>
+                    <h2>Playing Guitar</h2>
                     <div class="video-container">
                         <iframe 
                             width="560" 
