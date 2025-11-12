@@ -36,3 +36,6 @@ define('CSP_REPORT_URI', null); // Set to URL for CSP violation reports
 define('ENVIRONMENT', 'production'); // 'development' or 'production'
 define('DEBUG_MODE', ENVIRONMENT === 'development');
 
+// Asset Versioning (for cache busting)
+define('ASSET_VERSION', '1.2');
+

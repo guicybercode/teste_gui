@@ -1,4 +1,7 @@
 <?php
+// Start session for CSRF protection
+session_start();
+
 // Load configuration
 require_once __DIR__ . '/config.php';
 
@@ -115,6 +118,23 @@ if (!file_exists($chatFile)) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $clientIP = getClientIP();
     
+    // Read and validate JSON input
+    $rawInput = file_get_contents('php://input');
+    if (empty($rawInput)) {
+        http_response_code(400);
+        echo json_encode(['error' => 'Request body is required']);
+        exit;
+    }
+    
+    $input = json_decode($rawInput, true);
+    
+    // Validate CSRF token
+    if (!isset($input['csrf_token']) || !validateCSRFToken($input['csrf_token'])) {
+        http_response_code(403);
+        echo json_encode(['error' => 'Invalid CSRF token. Please refresh the page and try again.']);
+        exit;
+    }
+    
     // Rate limiting
     if (!checkRateLimit($clientIP, $rateLimitFile, $rateLimitMessages, $rateLimitWindow)) {
         http_response_code(429);
@@ -128,16 +148,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode(['error' => 'Chat file too large. Please contact administrator.']);
         exit;
     }
-    
-    // Read and validate JSON input
-    $rawInput = file_get_contents('php://input');
-    if (empty($rawInput)) {
-        http_response_code(400);
-        echo json_encode(['error' => 'Request body is required']);
-        exit;
-    }
-    
-    $input = json_decode($rawInput, true);
     
     // Validate JSON decoding
     if (json_last_error() !== JSON_ERROR_NONE) {
@@ -238,6 +248,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit;
 }
 
+// Generate CSRF token
+function generateCSRFToken() {
+    if (!isset($_SESSION['csrf_token'])) {
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    }
+    return $_SESSION['csrf_token'];
+}
+
+// Validate CSRF token
+function validateCSRFToken($token) {
+    if (!isset($_SESSION['csrf_token'])) {
+        return false;
+    }
+    return hash_equals($_SESSION['csrf_token'], $token);
+}
+
 // Handle GET request - Retrieve messages
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $messages = [];
@@ -245,6 +271,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $content = file_get_contents($chatFile);
         $messages = json_decode($content, true) ?: [];
     }
+    
+    // Generate and include CSRF token
+    $csrfToken = generateCSRFToken();
     
     // Remove messages older than 24 hours
     $currentTime = time();
@@ -270,7 +299,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     // Return last 50 messages
     $messages = array_slice($messages, -50);
     
-    echo json_encode(['messages' => $messages]);
+    echo json_encode([
+        'messages' => $messages,
+        'csrf_token' => $csrfToken
+    ]);
     exit;
 }
 

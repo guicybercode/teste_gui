@@ -21,13 +21,16 @@
     box-sizing: border-box;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
-    font-family: Georgia, 'Times New Roman', serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     line-height: 1.6;
     color: var(--text-secondary);
     background: var(--bg-primary);
     min-height: 100vh;
-    scroll-behavior: smooth;
 }
 
 /* Skip to content link */
@@ -70,7 +73,7 @@ body {
 }
 
 .nav-logo h1 {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     font-size: 1.5rem;
     font-weight: 600;
     color: var(--text-primary);
@@ -82,7 +85,7 @@ body {
     display: flex;
     flex-direction: column;
     line-height: 1;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     font-weight: 700;
     letter-spacing: 2px;
 }
@@ -125,15 +128,31 @@ body {
 }
 
 .nav-links a {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     color: var(--text-secondary);
     text-decoration: none;
     font-size: 0.95rem;
-    transition: color 0.2s;
+    transition: color 0.2s ease;
+    position: relative;
 }
 
 .nav-links a:hover {
     color: var(--link-color);
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--link-color);
+    transition: width 0.3s ease;
+}
+
+.nav-links a:hover::after {
+    width: 100%;
 }
 
 /* Mobile Menu Toggle Button */
@@ -199,7 +218,7 @@ body {
 }
 
 .sidebar-content h3 {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     font-size: 1rem;
     font-weight: 600;
     color: var(--text-primary);
@@ -218,17 +237,21 @@ body {
 }
 
 .sidebar-menu a {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     color: var(--text-secondary);
     text-decoration: none;
     font-size: 0.9rem;
     display: block;
     padding: 0.25rem 0;
-    transition: color 0.2s;
+    transition: all 0.2s ease;
+    padding-left: 0.5rem;
+    border-left: 2px solid transparent;
 }
 
 .sidebar-menu a:hover {
     color: var(--link-color);
+    padding-left: 0.75rem;
+    border-left-color: var(--link-color);
 }
 
 .sidebar-section {
@@ -238,7 +261,7 @@ body {
 }
 
 .sidebar-section h4 {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     font-size: 0.9rem;
     font-weight: 600;
     color: var(--text-primary);
@@ -268,7 +291,7 @@ body {
 }
 
 .article-header h1 {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     font-size: 2.5rem;
     font-weight: 400;
     color: var(--text-primary);
@@ -296,7 +319,7 @@ body {
 }
 
 .infobox h2 {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     font-size: 1.1rem;
     font-weight: 600;
     color: var(--text-primary);
@@ -357,7 +380,7 @@ body {
 }
 
 .article-content h2 {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     font-size: 1.85rem;
     font-weight: 500;
     color: var(--text-primary);
@@ -369,7 +392,7 @@ body {
 }
 
 .article-content h3 {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     font-size: 1.35rem;
     font-weight: 500;
     color: var(--text-primary);
@@ -416,18 +439,19 @@ body {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
     padding: 1.5rem;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 0 2px 6px var(--shadow-soft);
+    will-change: transform, box-shadow;
 }
 
 .portfolio-item:hover {
     border-color: var(--link-color);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px var(--shadow-medium);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px var(--shadow-medium);
 }
 
 .portfolio-item h3 {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     font-size: 1.2rem;
     font-weight: 600;
     color: var(--text-primary);
@@ -437,6 +461,7 @@ body {
 .portfolio-item h3 a {
     color: var(--text-primary);
     text-decoration: none;
+    transition: color 0.2s ease;
 }
 
 .portfolio-item h3 a:hover {
@@ -464,12 +489,12 @@ body {
 
 .portfolio-language {
     color: var(--text-muted);
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 .portfolio-stars {
     color: var(--text-muted);
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 .portfolio-link {
@@ -477,13 +502,15 @@ body {
     color: var(--link-color);
     text-decoration: none;
     font-size: 0.9rem;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    transition: color 0.2s;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    transition: all 0.2s ease;
+    position: relative;
 }
 
 .portfolio-link:hover {
     color: var(--link-hover);
     text-decoration: underline;
+    transform: translateX(2px);
 }
 
 .portfolio-loading {
@@ -545,7 +572,7 @@ body {
     background: var(--bg-primary);
     padding: 1rem;
     margin-bottom: 1rem;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 .chat-message {
@@ -591,7 +618,7 @@ body {
     border: 1px solid var(--border-color);
     background: var(--bg-secondary);
     color: var(--text-primary);
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     font-size: 0.9rem;
 }
 
@@ -609,7 +636,7 @@ body {
     background: var(--link-color);
     color: #ffffff;
     border: none;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     font-size: 0.9rem;
     font-weight: 600;
     cursor: pointer;
@@ -991,14 +1018,14 @@ body {
     color: #ffffff;
     border: none;
     border-radius: 50%;
-    font-size: 1.5rem;
-    cursor: pointer;
-    box-shadow: 0 4px 12px var(--shadow-medium);
-    z-index: 1000;
-    transition: all 0.3s ease;
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
+    font-size: 1.5rem;
+    box-shadow: 0 4px 12px var(--shadow-medium);
+    z-index: 1000;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     will-change: transform, opacity;
 }
 
@@ -1010,6 +1037,12 @@ body {
 
 .scroll-to-top:active {
     transform: translateY(-1px);
+}
+
+.scroll-to-top i {
+    width: 24px;
+    height: 24px;
+    stroke-width: 2;
 }
 
 /* Performance optimizations */

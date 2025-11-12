@@ -36,11 +36,21 @@
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
     <link rel="dns-prefetch" href="https://api.github.com">
     <link rel="dns-prefetch" href="https://www.youtube.com">
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     <link rel="preconnect" href="https://api.github.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Feather Icons -->
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
     
     <!-- Stylesheet -->
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css?v=<?php echo ASSET_VERSION; ?>">
     
     <!-- Structured Data (JSON-LD) -->
     <script type="application/ld+json">
@@ -292,7 +302,15 @@
         <p>&copy; 2025 Cyber Mathrock. Software Engineer & Music</p>
     </footer>
 
-    <script src="js/toast.js"></script>
-    <script src="js/main.js"></script>
+    <script src="js/toast.js?v=<?php echo ASSET_VERSION; ?>"></script>
+    <script src="js/main.js?v=<?php echo ASSET_VERSION; ?>"></script>
+    <script>
+        // Initialize Feather Icons after page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof feather !== 'undefined') {
+                feather.replace();
+            }
+        });
+    </script>
 </body>
 </html>

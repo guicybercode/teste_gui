@@ -7,6 +7,11 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeScrollAnimations();
     initializeScrollToTop();
     initializeMobileMenu();
+    
+    // Initialize Feather Icons after all content is loaded
+    if (typeof feather !== 'undefined') {
+        feather.replace();
+    }
 });
 
 // GitHub Portfolio
@@ -260,9 +265,15 @@ async function initializePortfolio() {
                     <p class="portfolio-description">${description}</p>
                     <div class="portfolio-meta">
                         <span class="portfolio-language">${language}</span>
-                        <span class="portfolio-stars">⭐ ${stars}</span>
+                        <span class="portfolio-stars">
+                            <i data-feather="star" style="width: 14px; height: 14px; vertical-align: middle;"></i>
+                            ${stars}
+                        </span>
                     </div>
-                    <a href="${url}" target="_blank" rel="noopener noreferrer" class="portfolio-link">View on GitHub →</a>
+                    <a href="${url}" target="_blank" rel="noopener noreferrer" class="portfolio-link">
+                        View on GitHub 
+                        <i data-feather="arrow-right" style="width: 14px; height: 14px; vertical-align: middle; margin-left: 4px;"></i>
+                    </a>
                 `;
 
                 portfolioContainer.appendChild(repoCard);
@@ -271,6 +282,11 @@ async function initializePortfolio() {
                 console.error(`Error rendering repository ${index}:`, renderError, repo);
             }
         });
+        
+        // Replace Feather icons after rendering
+        if (typeof feather !== 'undefined') {
+            feather.replace();
+        }
         
         console.log('Portfolio rendering complete');
     }
@@ -486,6 +502,7 @@ let pollingInterval = 3000; // Start with 3 seconds
 let isUserScrolling = false;
 let userScrollPosition = 0;
 let shouldAutoScroll = true;
+let csrfToken = null; // CSRF token for chat security
 
 function initializeChat() {
     const sendBtn = document.getElementById('sendChatBtn');
@@ -565,6 +582,11 @@ function loadChatMessages() {
             return response.json();
         })
         .then(data => {
+            // Store CSRF token if provided
+            if (data.csrf_token) {
+                csrfToken = data.csrf_token;
+            }
+            
             if (data.messages && data.messages.length > 0) {
                 const messagesContainer = document.getElementById('chatMessages');
                 if (!messagesContainer) return;
@@ -635,6 +657,14 @@ function sendMessage() {
     sendBtn.disabled = true;
     sendBtn.textContent = 'Sending...';
     
+    // Check if we have a CSRF token
+    if (!csrfToken) {
+        toast.error('Security token not loaded. Please refresh the page.');
+        sendBtn.disabled = false;
+        sendBtn.textContent = 'Send';
+        return;
+    }
+    
     fetch('chat.php', {
         method: 'POST',
         headers: {
@@ -642,7 +672,8 @@ function sendMessage() {
         },
         body: JSON.stringify({
             username: username,
-            message: message
+            message: message,
+            csrf_token: csrfToken
         })
     })
     .then(response => {
@@ -734,9 +765,14 @@ function initializeScrollToTop() {
     scrollButton.id = 'scrollToTop';
     scrollButton.className = 'scroll-to-top';
     scrollButton.setAttribute('aria-label', 'Scroll to top');
-    scrollButton.innerHTML = '↑';
+    scrollButton.innerHTML = '<i data-feather="arrow-up"></i>';
     scrollButton.style.display = 'none';
     document.body.appendChild(scrollButton);
+    
+    // Replace Feather icon after button is added
+    if (typeof feather !== 'undefined') {
+        feather.replace();
+    }
     
     // Debounce function
     function debounce(func, wait) {
